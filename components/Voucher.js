@@ -14,8 +14,10 @@ export default function Voucher({ data }) {
         {filtereGroup.map((gameFilter, key) => {
           return (
             <div key={key}>
-              <h2 className="text-2xl text-gray-400">{gameFilter.category}</h2>
-              <div className="grid mx-2 pt-2 grid-cols-3 gap-y-10 gap-x-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6 xl:gap-x-8">
+              <span class="before:block mt-2 before:absolute before:-inset-1 before:-skew-y-2 before:bg-blue-500 relative inline-block">
+                <span class="relative text-white">{gameFilter.category}</span>
+              </span>
+              <div className="grid mt-2 mx-2 pt-2 grid-cols-3 gap-y-10 gap-x-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6 xl:gap-x-8">
                 {data.map((gameItem, key) => {
                   if (gameFilter.category == gameItem.category) {
                     return (

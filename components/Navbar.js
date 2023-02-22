@@ -17,7 +17,7 @@ function className(...classes) {
 export default function Navbar({ data }) {
   const { brandName, brand } = data;
   return (
-    <Disclosure as="nav" className="bg-black fixed left-0 right-0 top-0 z-50">
+    <Disclosure as="nav" className="bg-black fixed left-0 w-full z-50">
       {({ open }) => (
         <>
           <div className="min-w-7xl mx-auto px-2 sm:px-6 lg:px-8 border-b border-grey-50">
@@ -48,11 +48,11 @@ export default function Navbar({ data }) {
                     className="logo cursor-pointer"
                     alt="logo"
                   />
-                  <h1 className="font-semibold text-xl cursor-pointer bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-violet-500">
+                  <h1 className="font-semibold  text-xl cursor-pointer bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-violet-500">
                     {brandName}
                   </h1>
                 </div>
-                <div className="hidden right-0 flex sm:block sm:ml-6 md:ml-60">
+                <div className="hidden flex sm:block sm:ml-6 md:ml-60">
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
                       <a
@@ -60,7 +60,7 @@ export default function Navbar({ data }) {
                         key={item.name}
                         className={className(
                           item.current
-                            ? "bg-blue-500 shadow-lg text-white"
+                            ? "bg-blue-500 shadow-lg text-white text-sm"
                             : "text-grey-200 hover:shadow-lg hover:bg-blue-500 hover:text-white",
                           "px-3 py-2 rounded-md text-sm font-medium"
                         )}

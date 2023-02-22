@@ -34,7 +34,7 @@ export default function Carousel({ data }) {
                     width={1300}
                     height={100}
                     alt="Carousel Game"
-                    className="w-full object-cover object-center"
+                    className="w-full object-cover object-center cursor-grab  focus:cursor-auto"
                   />
                 </div>
               </div>
