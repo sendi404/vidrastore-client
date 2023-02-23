@@ -14,8 +14,7 @@ function className(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Navbar({ data }) {
-  const { brandName, brand } = data;
+export default function Navbar({ brandName, brand }) {
   return (
     <Disclosure as="nav" className="bg-black fixed left-0 w-full z-50">
       {({ open }) => (
@@ -42,11 +41,13 @@ export default function Navbar({ data }) {
               <div className="flex item-center justify-between sm:items-stretch sm:justify-start">
                 <div className="flex shrink-0 flex items-center ">
                   <Image
-                    src={`https://blog.kawestore.com/uploads/${brand}`}
-                    width={45}
-                    height={45}
-                    className="logo cursor-pointer"
-                    alt="logo"
+                  src={`https://blog.kawestore.com/uploads/${brand}`}
+                  placeholder="blur"
+                  blurDataURL="./loading.svg"
+                  unoptimized
+                  width={45}
+                  height={45}
+                  alt="logo"
                   />
                   <h1 className="font-semibold  text-xl cursor-pointer bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-violet-500">
                     {brandName}
