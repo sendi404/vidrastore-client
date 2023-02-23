@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 export default function Carousel({ data }) {
   const [emblaRef] = useEmblaCarousel({ loop: true }, [Autoplay()]);
   return (
-    <div className="mx-0 max-w-2xl py-20 md:mx-20 px-4 sm:py-20 md:py-20 sm:px-6 lg:max-w-7xl lg:px-8">
+    <div className="mx-0 max-w-2xl pt-20 md:mx-20 px-4 sm:pt-20 md:pt-20 sm:px-6 lg:max-w-7xl lg:px-8">
       <div className="embla" ref={emblaRef}>
         <motion.div 
         initial="hidden"

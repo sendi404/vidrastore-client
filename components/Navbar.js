@@ -20,8 +20,8 @@ export default function Navbar({ data }) {
     <Disclosure as="nav" className="bg-black fixed left-0 w-full z-50">
       {({ open }) => (
         <>
-          <div className="min-w-7xl mx-auto px-2 sm:px-6 lg:px-8 border-b border-grey-50">
-            <div className="relative flex items-center justify-between h-16 md:mx-20 mx-0">
+          <div className="min-w-7xl mx-auto px-2 sm:px-6 lg:px-8 border-b border-grey-50 ">
+            <div className="relative flex items-end justify-between h-16 md:mx-20 mx-0">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 {/* Mobile */}
                 <Disclosure.Button className="inline-flex sm:pt items-center justify-center p-2 rounded-md text-grey-400 hover:text-white hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
@@ -39,7 +39,7 @@ export default function Navbar({ data }) {
                   )}
                 </Disclosure.Button>
               </div>
-              <div className="flex-1 flex item-center justify-center sm:items-stretch sm:justify-start">
+              <div className="flex item-center justify-between sm:items-stretch sm:justify-start">
                 <div className="flex shrink-0 flex items-center ">
                   <Image
                     src={`https://blog.kawestore.com/uploads/${brand}`}
