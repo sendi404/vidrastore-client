@@ -5,7 +5,7 @@ import HeroIMage from "../public/KaweStoreT.png"
 export default function HeroPage() {
   return (
     <div className="pt-20 min-w-7xl mx-0 md:mx-20">
-        <div className="flex md:flex-row flex-col justify-between items-center my-10">
+        <nav className="flex md:flex-row flex-col justify-between items-center my-10">
             <div className="flex-col px-10">
                 <h1 className="md:text-5xl lg:text-6xl text-4xl text-blue-500 font-bold">
                     Kami juga menyediakan{" "}
@@ -21,7 +21,7 @@ export default function HeroPage() {
             <div className="px-10">
                 <Image alt="ImageHero" src={HeroIMage} width={900} height={900}/>
             </div>
-        </div>
+        </nav>
     </div>
   )
 }

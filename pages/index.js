@@ -14,39 +14,11 @@ const APIVERSION = "api/v1";
 const DESIGNURL = "players/design";
 const LANDINGPAGEURL = "players/landingPage";
 
-export async function getServerSideProps({ req, res }) {
-  res.setHeader(
-    'Cache-Control',
-    'public, s-maxage=10, stale-while-revalidate=59'
-  )
-  const resDesign = await fetch(`${URLAPI}/${APIVERSION}/${DESIGNURL}`, {
-    headers: {
-      Authorization: `Bearer ${AUTHORIZATION}`,
-    },
-  });
-  const resLandingPage = await fetch(`${URLAPI}/${APIVERSION}/${LANDINGPAGEURL}`, {
-    headers: {
-      Authorization: `Bearer ${AUTHORIZATION}`,
-    },
-  });
-
-  const DesignItem = await resDesign.json();
-  const LandigPageItem = await resLandingPage.json();
-
-  return {
-    props: {
-      DesignItem,
-      LandigPageItem,
-    },
-  };
-}
-
-export default function Home(props) {
-  const {DesignItem, LandigPageItem } = props
+export default function Home() {
   return (
     <>
-      <Carousel data={DesignItem[0].carousel} />
-      <Voucher data={LandigPageItem.data}/>
+      {/* <Carousel data={DesignItem[0].carousel} />
+      <Voucher data={LandigPageItem.data}/> */}
       <HeroPage />
       <Information />
     </>
