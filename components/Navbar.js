@@ -1,135 +1,101 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
-import { Transition, motion } from "@headlessui/react";
-import { Link } from "react-scroll";
+import { Disclosure } from "@headlessui/react";
 import { Bars3CenterLeftIcon, XMarkIcon } from "@heroicons/react/24/solid";
 
-const variants = {
-  visible: { opacity: 1 },
-  hidden: { opacity: 0 },
-};
+const navigation = [
+  { name: "Home", href: "#", current: true },
+  { name: "Dashboard", href: "#", current: false },
+  { name: "Jasa Joki", href: "#", current: false },
+  { name: "Login", href: "#", current: false },
+];
 
-export default function Navbar({ brandName, brand }) {
-  const [isOpen, setIsOpen] = useState(false);
+function className(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
+
+export default function Navbar(data) {
+  const {brands, brandNames} = data;
   return (
-    <div>
-      <nav className="shadow-sm fixed w-full z-10">
-        <div className="w-full bg-black border-b border-blue-500">
-          <div className="flex item-center h-20 w-full">
-            <div className="flex items items-center mx-20 justify-between w-full">
-              <div className="flex justify-center items-center flex-shrink-0">
-                <h1 className="font-bold text-xl cursor-pointer">Kawe Store</h1>
+    <Disclosure as="nav" className="bg-black fixed left-0 right-0 top-0 z-50">
+      {({ open }) => (
+        <>
+          <div className="min-w-7xl mx-auto px-2 sm:px-6 lg:px-8 border-b border-grey-50">
+            <div className="relative flex items-center justify-between h-16 md:mx-20 mx-0">
+              <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
+                {/* Mobile */}
+                <Disclosure.Button className="inline-flex sm:pt items-center justify-center p-2 rounded-md text-grey-400 hover:text-white hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                  <div className="sr-only">Open Main Menu</div>
+                  {open ? (
+                    <XMarkIcon
+                      className="block h-6 w-6 text-blue-500"
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    <Bars3CenterLeftIcon
+                      className="block h-6 w-6 text-blue-500"
+                      aria-hidden="true"
+                    />
+                  )}
+                </Disclosure.Button>
               </div>
-              <div className="hidden md:block">
-                <div className="ml-10 flex items-baseline space-x-4">
-                  <Link
-                    activeClass="Home"
-                    to="home"
-                    smooth={true}
-                    offset={50}
-                    duration={500}
-                    className="cursor-pointer text-blue-500 font-semibold px-3 py-2 hover:font-black"
-                  >
-                    Home
-                  </Link>
-                  <Link
-                    activeClass="about"
-                    to="about"
-                    smooth={true}
-                    offset={50}
-                    delay={500}
-                    className="cursor-pointer hover:bg-blue-500 text-blue-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    About
-                  </Link>
-                  <Link
-                    activeClass="Joki"
-                    to="Joki"
-                    smooth={true}
-                    offset={50}
-                    delay={500}
-                    className="cursor-pointer hover:bg-blue-500 text-blue-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Joki
-                  </Link>
-                  <Link
-                    activeClass="login"
-                    to="login"
-                    smooth={true}
-                    offset={50}
-                    delay={500}
-                    className="cursor-pointer bg-blue-500 hover:bg-white text-white hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Login
-                  </Link>
+              <div className="flex-1 flex item-center justify-center sm:items-stretch sm:justify-start">
+                <div className="flex shrink-0 items-center ">
+                  <Image
+                    src={`https://blog.kawestore.com/uploads/${brands}`}
+                    width={45}
+                    height={45}
+                    className="logo cursor-pointer"
+                    alt="logo"
+                  />
+                  <h1 className="font-semibold text-xl cursor-pointer bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-violet-500">
+                    {brandNames}
+                  </h1>
+                </div>
+                <div className="hidden right-0 sm:block sm:ml-6 md:ml-60">
+                  <div className="flex space-x-4">
+                    {navigation.map((item) => (
+                      <a
+                        href={item.href}
+                        key={item.name}
+                        className={className(
+                          item.current
+                            ? "bg-blue-500 shadow-lg text-white"
+                            : "text-grey-200 hover:shadow-lg hover:bg-blue-500 hover:text-white",
+                          "px-3 py-2 rounded-md text-sm font-medium"
+                        )}
+                        aria-current={item.current ? "page" : undefined}
+                      >
+                          {item.name}
+                      </a>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="mr-10 flex md:hidden">
-              <button
-                onClick={() => setIsOpen(!isOpen)}
-                type="button"
-                className="bg-blue-500 item-center justify-center p-2 mt-5 mb-5 rounded-md text-white hover:bg-blue-500 focus:outline-none focus:ring-offset-2 focus:ring-offset-blue-800 focus:ring-white"
-                aria-controls="mobile-menu"
-                aria-expanded="false"
-              >
-                <span className="sr-only">Open Main Menu</span>
-                {!isOpen ? (
-                  <Bars3CenterLeftIcon
-                  className="block h-6 w-6 text-white"
-                  aria-hidden="true"
-                />
-                ) : (
-                  <XMarkIcon
-                    className="block h-6 w-6 text-white"
-                    aria-hidden="true"
-                  />
-                  
-                )}
-              </button>
-            </div>
           </div>
-        </div>
-        <Transition
-          show={isOpen}
-          enter="transition ease-out duration-100 transform"
-          enterFrom="opacity-0 scale-95"
-          enterTo="opacity-100 scale-100"
-          leave="transition ease-in duration-75 transform"
-          leaveFrom="opacity-100 scale-100"
-          leaveTo="opacity-0 scale-95"
-        >
-          {(ref) => (
-            <div
-              ref={ref}
-              className="bg-white px-2 pt-2 pb-3 space-y-1 sm:px-3"
-            >
-              <Link
-                href="/"
-                activeClass="home"
-                to="home"
-                smooth={true}
-                offset={50}
-                duration={500}
-                className="cursor-pointer hover:bg-blue-500 text-gray-500 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-              >
-                Home{" "}
-              </Link>
-              <Link
-                href="/"
-                activeClass="home"
-                to="home"
-                smooth={true}
-                offset={50}
-                duration={500}
-                className="cursor-pointer hover:bg-blue-500 text-gray-500 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-              >
-                Home{" "}
-              </Link>
+          <Disclosure.Panel className="sm:hidden ">
+            <div className="pt-2 px-2  pb-3 space-y-1">
+              {navigation.map((item) => (
+                <Disclosure.Button
+                  href={item.href}
+                  key={item.name}
+                  as="a"
+                  className={className(
+                    item.current
+                      ? "bg-blue-500 shadow-lg text-white"
+                      : "text-grey-200 hover:shadow-lg hover:bg-blue-500 hover:text-white",
+                    "px-3 py-2 rounded-md text-sm font-medium block"
+                  )}
+                  aria-current={item.current ? "page" : undefined}
+                >
+                  {item.name}
+                </Disclosure.Button>
+              ))}
             </div>
-          )}
-        </Transition>
-      </nav>
-    </div>
+          </Disclosure.Panel>
+        </>
+      )}
+    </Disclosure>
   );
 }

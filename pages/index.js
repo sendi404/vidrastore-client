@@ -7,20 +7,29 @@ import Information from "@/components/Information";
 import Footer from "@/components/Footer";
 import Voucher from "@/components/Voucher";
 import Carousel from "@/components/Carousel";
+import { LandingPages,Carouseldat, DesignPage } from "@/services/LandingPage";
 
-const AUTHORIZATION = "wjMc4dnW0LIayNPFCTASDX3kdRYw0zil"
-const URLAPI = "https://blog.kawestore.com";
-const APIVERSION = "api/v1";
-const DESIGNURL = "players/design";
-const LANDINGPAGEURL = "players/landingPage";
-
-export default function Home() {
+export async function getStaticProps() {
+  const design = await DesignPage();
+  const data = await LandingPages();
+  const carousel = await Carouseldat();
+  return {
+    props: {
+      data,
+      design,
+      carousel
+    },
+  }
+}
+export default function Home({data, design, carousel}) {
   return (
     <>
-      {/* <Carousel data={DesignItem[0].carousel} />
-      <Voucher data={LandigPageItem.data}/> */}
+      <Navbar brands={design.brand} brandNames={design.brandName}/>
+      <Carousel data={carousel} />
+      <Voucher data={data.data}/>
       <HeroPage />
       <Information />
+      <Footer />
     </>
   );
 }
