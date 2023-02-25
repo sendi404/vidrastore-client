@@ -7,25 +7,23 @@ import Information from "@/components/Information";
 import Footer from "@/components/Footer";
 import Voucher from "@/components/Voucher";
 import Carousel from "@/components/Carousel";
-import { LandingPages,Carouseldat, DesignPage } from "@/services/LandingPage";
+import { LandingPages, DesignPage } from "@/services/LandingPage";
 
 export async function getStaticProps() {
   const design = await DesignPage();
   const data = await LandingPages();
-  const carousel = await Carouseldat();
   return {
     props: {
       data,
       design,
-      carousel
     },
   }
 }
-export default function Home({data, design, carousel}) {
+export default function Home({data, design}) {
   return (
     <>
       <Navbar brands={design.brand} brandNames={design.brandName}/>
-      <Carousel data={carousel} />
+      <Carousel data={design.carousel} />
       <Voucher data={data.data}/>
       <HeroPage />
       <Information />

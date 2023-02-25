@@ -21,14 +21,7 @@ export async function DesignPage() {
     const axiosResponses = responses.data;
     return axiosResponses[0];
 }
-export async function Carouseldat() {
-    const URL = "players/design";
 
-    const responses = await client.get(`${ROOT_API}/${API_VERSI}/${URL}`);
-
-    const axiosResponses = responses.data;
-    return axiosResponses[0].carousel;
-}
 export async function LandingPages() {
     const LANDINGPAGEURL = "players/landingPage";
     const resLandingPage = await client.get(`${ROOT_API}/${API_VERSI}/${LANDINGPAGEURL}`, {
