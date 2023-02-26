@@ -20,7 +20,6 @@ export async function getServerSideProps(context) {
 }
 
 export default function product({ data, design, payment }) {
-  console.log(data);
   const paymentReal = []
   const ewalet = []
   const retail = []
@@ -98,9 +97,9 @@ export default function product({ data, design, payment }) {
                   <div className="flex-1 ml-3 mr-3 mt-5 mb-5">
                     <input
                       type="number"
-                      name="userID"
+                      name="zone"
                       className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
-                      placeholder="Masukan User ID"
+                      placeholder="Masukan Zone"
                     />
                   </div>
                 </div>
@@ -205,9 +204,9 @@ export default function product({ data, design, payment }) {
                                       <input type="radio" id={r.paymentMethod} name="payment" value={r.paymentMethod} className="hidden peer" required />
                                       <label htmlFor={r.paymentMethod} className="inline-flex items-start justify-between w-full p-5 text-gray-500 bg-white border Customize-Nominal border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
                                       <div className="block">
-                                            <div className="w-full ml-10"><Image alt={r.paymentMethod} src={r.paymentImage} width={95} height={95} /></div>
-                                        </div> 
-                                        <div className="mr-20">asdas</div>
+                                            <div className="w-full ml-3 md:ml-10"><Image alt={r.paymentMethod} src={r.paymentImage} width={95} height={95} /></div>
+                                      </div> 
+                                        <div className="mr-3 mt-3 md:mr-20">Belum ready</div>
                                       </label>
                                   </li>
                                   )
@@ -236,9 +235,9 @@ export default function product({ data, design, payment }) {
                                       <input type="radio" id={r.paymentMethod} name="payment" value={r.paymentMethod} className="hidden peer" required />
                                       <label htmlFor={r.paymentMethod} className="inline-flex items-start justify-between w-full p-5 text-gray-500 bg-white border Customize-Nominal border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
                                       <div className="block">
-                                            <div className="w-full ml-10"><Image alt={r.paymentMethod} src={r.paymentImage} width={95} height={95} /></div>
-                                        </div> 
-                                        <div className="mr-20">asdas</div>
+                                            <div className="w-full ml-3 md:ml-10"><Image alt={r.paymentMethod} src={r.paymentImage} width={95} height={95} /></div>
+                                      </div> 
+                                        <div className="mr-3 mt-3 md:mr-20">Belum ready</div>
                                       </label>
                                   </li>
                                   )
@@ -267,9 +266,9 @@ export default function product({ data, design, payment }) {
                                       <input type="radio" id={r.paymentMethod} name="payment" value={r.paymentMethod} className="hidden peer" required />
                                       <label htmlFor={r.paymentMethod} className="inline-flex items-start justify-between w-full p-5 text-gray-500 bg-white border Customize-Nominal border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
                                       <div className="block">
-                                            <div className="w-full ml-10"><Image alt={r.paymentMethod} src={r.paymentImage} width={95} height={95} /></div>
-                                        </div> 
-                                        <div className="mr-20">asdas</div>
+                                            <div className="w-full ml-3 md:ml-10"><Image alt={r.paymentMethod} src={r.paymentImage} width={95} height={95} /></div>
+                                      </div> 
+                                        <div className="mr-3 mt-3 md:mr-20">Belum ready</div>
                                       </label>
                                   </li>
                                   )
