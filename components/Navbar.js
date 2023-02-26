@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
-import { Disclosure } from "@headlessui/react";
+import { Disclosure, Transition } from "@headlessui/react";
 import { Bars3CenterLeftIcon, XMarkIcon } from "@heroicons/react/24/solid";
 
 const navigation = [
@@ -15,7 +15,7 @@ function className(...classes) {
 }
 
 export default function Navbar(data) {
-  const {brands, brandNames} = data;
+  const { brands, brandNames } = data;
   return (
     <Disclosure as="nav" className="bg-black fixed left-0 right-0 top-0 z-50">
       {({ open }) => (
@@ -66,7 +66,7 @@ export default function Navbar(data) {
                         )}
                         aria-current={item.current ? "page" : undefined}
                       >
-                          {item.name}
+                        {item.name}
                       </a>
                     ))}
                   </div>
@@ -74,26 +74,35 @@ export default function Navbar(data) {
               </div>
             </div>
           </div>
-          <Disclosure.Panel className="sm:hidden ">
-            <div className="pt-2 px-2  pb-3 space-y-1">
-              {navigation.map((item) => (
-                <Disclosure.Button
-                  href={item.href}
-                  key={item.name}
-                  as="a"
-                  className={className(
-                    item.current
-                      ? "bg-blue-500 shadow-lg text-white"
-                      : "text-grey-200 hover:shadow-lg hover:bg-blue-500 hover:text-white",
-                    "px-3 py-2 rounded-md text-sm font-medium block"
-                  )}
-                  aria-current={item.current ? "page" : undefined}
-                >
-                  {item.name}
-                </Disclosure.Button>
-              ))}
-            </div>
-          </Disclosure.Panel>
+          <Transition
+            enter="transition duration-100 ease-out"
+            enterFrom="transform scale-95 opacity-0"
+            enterTo="transform scale-100 opacity-100"
+            leave="transition duration-75 ease-out"
+            leaveFrom="transform scale-100 opacity-100"
+            leaveTo="transform scale-95 opacity-0"
+          >
+            <Disclosure.Panel className="sm:hidden ">
+              <div className="pt-2 px-2  pb-3 space-y-1">
+                {navigation.map((item) => (
+                  <Disclosure.Button
+                    href={item.href}
+                    key={item.name}
+                    as="a"
+                    className={className(
+                      item.current
+                        ? "bg-blue-500 shadow-lg text-white"
+                        : "text-grey-200 hover:shadow-lg hover:bg-blue-500 hover:text-white",
+                      "px-3 py-2 rounded-md text-sm font-medium block"
+                    )}
+                    aria-current={item.current ? "page" : undefined}
+                  >
+                    {item.name}
+                  </Disclosure.Button>
+                ))}
+              </div>
+            </Disclosure.Panel>
+          </Transition>
         </>
       )}
     </Disclosure>

@@ -20,7 +20,7 @@ export default function Voucher({ data }) {
               {data.map((gameItem, key) => {
                 if (gameFilter.category == gameItem.category) {
                   return (
-                    <Link
+                    <a
                       href={`/product/${gameItem.name.replace(/ /g, "-")}`}
                       className="group"
                       key={key}
@@ -59,7 +59,7 @@ export default function Voucher({ data }) {
                       <h3 className="mt-4 text-sm text-center text-white-700">
                         {gameItem.name}
                       </h3>
-                    </Link>
+                    </a>
                   );
                 }
               })}

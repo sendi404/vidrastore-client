@@ -1,29 +1,48 @@
 import Navbar from "@/components/Navbar";
 import Image from "next/image";
-import { DesignPage } from "@/services/LandingPage";
+import { DesignPage, LandingPages } from "@/services/LandingPage";
 import React, { useState } from "react";
-import { Disclosure } from '@headlessui/react'
+import { useRouter } from 'next/router'
+import { Disclosure, Transition } from '@headlessui/react'
 import { ChevronUpIcon } from '@heroicons/react/20/solid'
 import { getDetailVoucher } from "@/services/DetailPage";
 import { RadioGroup } from "@headlessui/react";
 import { getPaymentGateAway } from "@/services/Payment";
 import Head from "next/head";
 
-export async function getServerSideProps(context) {
-  const queryName = context.query.name;
+export async function getStaticPaths() {
+  const landingPage = await LandingPages();
+  const paths = landingPage.data.map((datas)=>{
+    return {
+      params: {name:datas.name.replace(/ /g, "-")}
+    }
+  })
+  return {
+      paths,
+      fallback: true,
+  }
+}
+export async function getStaticProps(context) {
+  const queryName = context.params.name;
   const data = await getDetailVoucher(queryName);
   const design = await DesignPage();
   const payment = await getPaymentGateAway();
-
-  // Pass data to the page via props
-  return { props: { data, design, payment } };
+  return {
+    props: { data, design, payment },
+  }
 }
 
-export default function product({ data, design, payment }) {
+export default function product({data, design, payment}) {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const router = useRouter()
+  if (router.isFallback) {
+    return <div>Loading...</div>
+  }
   const paymentReal = []
   const ewalet = []
   const retail = []
   const va = []
+ 
   for (let i = 0; i < payment.length; i++) {
     if (payment[i].paymentMethod == 'DA' || payment[i].paymentMethod == 'NQ' || payment[i].paymentMethod == 'LA' || payment[i].paymentMethod == 'LQ') {
       ewalet.push(payment[i])
@@ -90,7 +109,7 @@ export default function product({ data, design, payment }) {
                     <input
                       type="number"
                       name="userID"
-                      className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
+                      className="mt-1 px-3 py-2 text-blue-500 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
                       placeholder="Masukan User ID"
                     />
                   </div>
@@ -98,7 +117,7 @@ export default function product({ data, design, payment }) {
                     <input
                       type="number"
                       name="zone"
-                      className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
+                      className="mt-1 px-3 py-2 text-blue-500 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
                       placeholder="Masukan Zone"
                     />
                   </div>
@@ -129,47 +148,6 @@ export default function product({ data, design, payment }) {
                       )
                     })}
                   </ul>
-                    {/* <RadioGroup value={plan} onChange={setPlan}>
-                      <RadioGroup.Label>Plan</RadioGroup.Label>
-                      <RadioGroup.Option
-                        value="startup"
-                        className="flex flex-1 Customize-Nominal"
-                      >
-                        {({ checked }) => (
-                          <span
-                            className={
-                              checked
-                                ? "bg-blue-200 cursor-pointer"
-                                : "text-black"
-                            }
-                          >
-                            Startup
-                          </span>
-                        )}
-                      </RadioGroup.Option>
-                      <RadioGroup.Option value="business">
-                        {({ checked }) => (
-                          <span
-                            className={
-                              checked ? "bg-blue-200 cursor-pointer" : ""
-                            }
-                          >
-                            Business
-                          </span>
-                        )}
-                      </RadioGroup.Option>
-                      <RadioGroup.Option value="enterprise">
-                        {({ checked }) => (
-                          <span
-                            className={
-                              checked ? "bg-blue-200 cursor-pointer" : ""
-                            }
-                          >
-                            Enterprise
-                          </span>
-                        )}
-                      </RadioGroup.Option>
-                    </RadioGroup> */}
                   </div>
                   <div className="Customize-bottom"></div>
                 </div>
@@ -197,21 +175,31 @@ export default function product({ data, design, payment }) {
                                   } h-5 w-5 text-gray-500`}
                                 />
                               </Disclosure.Button>
-                              <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
-                                {data.ewalet.map((r)=> {
-                                  return(
-                                    <li key={r.paymentMethod} className="Customize-Nominal-border">
-                                      <input type="radio" id={r.paymentMethod} name="payment" value={r.paymentMethod} className="hidden peer" required />
-                                      <label htmlFor={r.paymentMethod} className="inline-flex items-start justify-between w-full p-5 text-gray-500 bg-white border Customize-Nominal border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
-                                      <div className="block">
-                                            <div className="w-full ml-3 md:ml-10"><Image alt={r.paymentMethod} src={r.paymentImage} width={95} height={95} /></div>
-                                      </div> 
-                                        <div className="mr-3 mt-3 md:mr-20">Belum ready</div>
-                                      </label>
-                                  </li>
-                                  )
-                                })}
-                              </Disclosure.Panel>
+                              <Transition
+                                enter="transition duration-100 ease-out"
+                                enterFrom="transform scale-95 opacity-0"
+                                enterTo="transform scale-100 opacity-100"
+                                leave="transition duration-75 ease-out"
+                                leaveFrom="transform scale-100 opacity-100"
+                                leaveTo="transform scale-95 opacity-0"
+                              >
+                                <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
+                                  {data.ewalet.map((r)=> {
+                                    return(
+                                      <li key={r.paymentMethod} className="Customize-Nominal-border">
+                                        <input type="radio" id={r.paymentMethod} name="payment" value={r.paymentMethod} className="hidden peer" required />
+                                        <label htmlFor={r.paymentMethod} className="inline-flex items-start justify-between w-full p-5 text-gray-500 bg-white border Customize-Nominal border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
+                                        <div className="block">
+                                              <div className="w-full ml-3 md:ml-10"><Image alt={r.paymentMethod} src={r.paymentImage} width={95} height={95} /></div>
+                                        </div> 
+                                          <div className="mr-3 mt-3 md:mr-20">Belum ready</div>
+                                        </label>
+                                    </li>
+                                    )
+                                  })}
+                                  
+                                </Disclosure.Panel>
+                              </Transition>
                             </>
                           )}
                         </Disclosure>
@@ -228,21 +216,30 @@ export default function product({ data, design, payment }) {
                                   } h-5 w-5 text-gray-500`}
                                 />
                               </Disclosure.Button>
-                              <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
-                                {data.retail.map((r)=> {
-                                  return(
-                                    <li key={r.paymentMethod} className="Customize-Nominal-border">
-                                      <input type="radio" id={r.paymentMethod} name="payment" value={r.paymentMethod} className="hidden peer" required />
-                                      <label htmlFor={r.paymentMethod} className="inline-flex items-start justify-between w-full p-5 text-gray-500 bg-white border Customize-Nominal border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
-                                      <div className="block">
-                                            <div className="w-full ml-3 md:ml-10"><Image alt={r.paymentMethod} src={r.paymentImage} width={95} height={95} /></div>
-                                      </div> 
-                                        <div className="mr-3 mt-3 md:mr-20">Belum ready</div>
-                                      </label>
-                                  </li>
-                                  )
-                                })}
-                              </Disclosure.Panel>
+                              <Transition
+                                enter="transition duration-100 ease-out"
+                                enterFrom="transform scale-95 opacity-0"
+                                enterTo="transform scale-100 opacity-100"
+                                leave="transition duration-75 ease-out"
+                                leaveFrom="transform scale-100 opacity-100"
+                                leaveTo="transform scale-95 opacity-0"
+                              >
+                                <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
+                                  {data.retail.map((r)=> {
+                                    return(
+                                      <li key={r.paymentMethod} className="Customize-Nominal-border">
+                                        <input type="radio" id={r.paymentMethod} name="payment" value={r.paymentMethod} className="hidden peer" required />
+                                        <label htmlFor={r.paymentMethod} className="inline-flex items-start justify-between w-full p-5 text-gray-500 bg-white border Customize-Nominal border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
+                                        <div className="block">
+                                              <div className="w-full ml-3 md:ml-10"><Image alt={r.paymentMethod} src={r.paymentImage} width={95} height={95} /></div>
+                                        </div> 
+                                          <div className="mr-3 mt-3 md:mr-20">Belum ready</div>
+                                        </label>
+                                    </li>
+                                    )
+                                  })}
+                                </Disclosure.Panel>
+                              </Transition>
                             </>
                           )}
                         </Disclosure>
@@ -259,21 +256,30 @@ export default function product({ data, design, payment }) {
                                   } h-5 w-5 text-gray-500`}
                                 />
                               </Disclosure.Button>
-                              <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
-                                {data.va.map((r)=> {
-                                  return(
-                                    <li key={r.paymentMethod} className="Customize-Nominal-border">
-                                      <input type="radio" id={r.paymentMethod} name="payment" value={r.paymentMethod} className="hidden peer" required />
-                                      <label htmlFor={r.paymentMethod} className="inline-flex items-start justify-between w-full p-5 text-gray-500 bg-white border Customize-Nominal border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
-                                      <div className="block">
-                                            <div className="w-full ml-3 md:ml-10"><Image alt={r.paymentMethod} src={r.paymentImage} width={95} height={95} /></div>
-                                      </div> 
-                                        <div className="mr-3 mt-3 md:mr-20">Belum ready</div>
-                                      </label>
-                                  </li>
-                                  )
-                                })}
-                              </Disclosure.Panel>
+                              <Transition
+                                enter="transition duration-100 ease-out"
+                                enterFrom="transform scale-95 opacity-0"
+                                enterTo="transform scale-100 opacity-100"
+                                leave="transition duration-75 ease-out"
+                                leaveFrom="transform scale-100 opacity-100"
+                                leaveTo="transform scale-95 opacity-0"
+                              >
+                                <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
+                                  {data.va.map((r)=> {
+                                    return(
+                                      <li key={r.paymentMethod} className="Customize-Nominal-border">
+                                        <input type="radio" id={r.paymentMethod} name="payment" value={r.paymentMethod} className="hidden peer" required />
+                                        <label htmlFor={r.paymentMethod} className="inline-flex items-start justify-between w-full p-5 text-gray-500 bg-white border Customize-Nominal border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
+                                        <div className="block">
+                                              <div className="w-full ml-3 md:ml-10"><Image alt={r.paymentMethod} src={r.paymentImage} width={95} height={95} /></div>
+                                        </div> 
+                                          <div className="mr-3 mt-3 md:mr-20">Belum ready</div>
+                                        </label>
+                                    </li>
+                                    )
+                                  })}
+                                </Disclosure.Panel>
+                              </Transition>
                             </>
                           )}
                         </Disclosure>
@@ -295,7 +301,7 @@ export default function product({ data, design, payment }) {
                     <input
                       type="number"
                       name="userID"
-                      className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
+                      className="mt-1 px-3 py-2 text-blue-500 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
                       placeholder="Nomor WA Aktif cth.6281283111111"
                     />
                   </div>
