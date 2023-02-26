@@ -4,7 +4,7 @@ import { Disclosure } from "@headlessui/react";
 import { Bars3CenterLeftIcon, XMarkIcon } from "@heroicons/react/24/solid";
 
 const navigation = [
-  { name: "Home", href: "#", current: true },
+  { name: "Home", href: "/", current: true },
   { name: "Dashboard", href: "#", current: false },
   { name: "Jasa Joki", href: "#", current: false },
   { name: "Login", href: "#", current: false },
@@ -20,7 +20,7 @@ export default function Navbar(data) {
     <Disclosure as="nav" className="bg-black fixed left-0 right-0 top-0 z-50">
       {({ open }) => (
         <>
-          <div className="min-w-7xl mx-auto px-2 sm:px-6 lg:px-8 border-b border-grey-50">
+          <div className="min-w-7xl mx-auto px-2 sm:px-6 lg:px-8 border-b border-blue-500">
             <div className="relative flex items-center justify-between h-16 md:mx-20 mx-0">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 {/* Mobile */}
@@ -52,7 +52,7 @@ export default function Navbar(data) {
                     {brandNames}
                   </h1>
                 </div>
-                <div className="hidden right-0 sm:block sm:ml-6 md:ml-60">
+                <div className="hidden md:block sm:block sm:ml-6 md:ml-60">
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
                       <a
