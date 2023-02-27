@@ -2,11 +2,10 @@ import Navbar from "@/components/Navbar";
 import Image from "next/image";
 import { DesignPage, LandingPages } from "@/services/LandingPage";
 import React, { useState } from "react";
-import { useRouter } from 'next/router'
 import { Disclosure, Transition } from '@headlessui/react'
 import { ChevronUpIcon } from '@heroicons/react/20/solid'
 import { getDetailVoucher } from "@/services/DetailPage";
-import { RadioGroup } from "@headlessui/react";
+import { FormatRupiah } from "@arismun/format-rupiah";
 import { getPaymentGateAway } from "@/services/Payment";
 import Head from "next/head";
 
@@ -33,26 +32,74 @@ export async function getStaticProps(context) {
 }
 
 export default function product({data, design, payment}) {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const router = useRouter()
-  if (router.isFallback) {
-    return <div>Loading...</div>
-  }
+  const [ nominal, setNominal ] = useState({
+    realPrice: 0
+  });
+  const [price, stPrice] = useState(null);
+  const [ paymentItem, setPaymentItem] = useState(null);
+  const [isShowing, setIsShowing] = useState(false);
+  
   const paymentReal = []
   const ewalet = []
   const retail = []
   const va = []
- 
+  
   for (let i = 0; i < payment.length; i++) {
     if (payment[i].paymentMethod == 'DA' || payment[i].paymentMethod == 'NQ' || payment[i].paymentMethod == 'LA' || payment[i].paymentMethod == 'LQ') {
+      const fees = payment[i]
+      switch (payment[i].paymentMethod) {
+        case 'DA':
+          fees.totalFee = 1.7;
+          break;
+        case 'NQ':
+          fees.totalFee = 0.7;
+          break;
+        case 'LA':
+          fees.totalFee = 3330;
+          break;
+        case 'LQ':
+          fees.totalFee = 0.8;
+          break;
+        default:
+          fees.totalFee = 0;
+          break;
+      } 
       ewalet.push(payment[i])
     } else if(payment[i].paymentMethod == 'FT') {
+      const fees = payment[i]
+      switch (payment[i].paymentMethod) {
+        case 'FT':
+          fees.totalFee = 2500;
+          break;
+      
+        default:
+          fees.totalFee = 0;
+          break;
+      }
       retail.push(payment[i])
     }else {
+      const fees = payment[i]
+      switch (payment[i].paymentMethod) {
+        case 'AG':
+          fees.totalFee = 1500;
+          break;
+        case 'M2':
+          fees.totalFee = 4000;
+          break;
+        default:
+          fees.totalFee = 3000;
+          break;
+      }
       va.push(payment[i])
     }
   }
-  paymentReal.push({"dat":1,"ewalet":ewalet},{"dat":2,"retail":retail},{"dat":3,"va":va})
+  paymentReal.push({"dat":1,"name": "E-Wallet","data":ewalet},{"dat":2,"name": "Retail","data":retail},{"dat":3,"name": "Virtual Account","data":va})
+  const onNominalChange = (val) => {
+    setNominal(val);
+  };
+  const onChangePayment = (val) => {
+    setPaymentItem(val);
+  };
   return (
     <>
       <Head>
@@ -137,7 +184,7 @@ export default function product({data, design, payment}) {
                     {data.nominals.map((data) => {
                       return(
                         <li key={data._id} className="Customize-Nominal-border">
-                          <input type="radio" id={data._id} name="nominal" value={data._id} className="hidden peer" required />
+                          <input type="radio" id={data._id} name="nominal" onClick={() => setIsShowing(true)} onChange={() => onNominalChange(data)}  value={data._id} className="hidden peer" required />
                           <label htmlFor={data._id} className="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border Customize-Nominal border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
                               <div className="block">
                                   <div className="w-full">{data.productName}</div>
@@ -159,134 +206,78 @@ export default function product({data, design, payment}) {
                     Pilih Metode Pembayaran
                   </span>
                 </div>
+                <Transition
+                    show={isShowing}
+                    enter="transition-opacity duration-75"
+                    enterFrom="opacity-0"
+                    enterTo="opacity-100"
+                    leave="transition-opacity duration-150"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                  >
                 <div className="flex flex-1 mt-2">
                   <div className="rounded-2xl w-full p-2">
                     {paymentReal.map((data)=> {
-                      if(data.dat == 1)
-                      return(
+                      return (
                         <Disclosure key={data.dat} defaultOpen>
-                          {({ open }) => (
-                            <>
-                              <Disclosure.Button className="flex w-full justify-between rounded-lg bg-gray-800 px-4 py-2 text-left text-sm font-medium text-gray-300 hover:bg-gray-900 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75">
-                                <span>E-Wallet</span>
-                                <ChevronUpIcon
-                                  className={`${
-                                    open ? 'rotate-180 transform' : ''
-                                  } h-5 w-5 text-gray-500`}
-                                />
-                              </Disclosure.Button>
-                              <Transition
-                                enter="transition duration-100 ease-out"
-                                enterFrom="transform scale-95 opacity-0"
-                                enterTo="transform scale-100 opacity-100"
-                                leave="transition duration-75 ease-out"
-                                leaveFrom="transform scale-100 opacity-100"
-                                leaveTo="transform scale-95 opacity-0"
-                              >
-                                <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
-                                  {data.ewalet.map((r)=> {
-                                    return(
-                                      <li key={r.paymentMethod} className="Customize-Nominal-border">
-                                        <input type="radio" id={r.paymentMethod} name="payment" value={r.paymentMethod} className="hidden peer" required />
-                                        <label htmlFor={r.paymentMethod} className="inline-flex items-start justify-between w-full p-5 text-gray-500 bg-white border Customize-Nominal border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
-                                        <div className="block">
-                                              <div className="w-full ml-3 md:ml-10"><Image alt={r.paymentMethod} src={r.paymentImage} width={95} height={95} /></div>
-                                        </div> 
-                                          <div className="mr-3 mt-3 md:mr-20">Belum ready</div>
-                                        </label>
-                                    </li>
-                                    )
-                                  })}
-                                  
-                                </Disclosure.Panel>
-                              </Transition>
-                            </>
-                          )}
-                        </Disclosure>
-                      )
-                      if(data.dat == 2)
-                      return(
-                        <Disclosure key={data.dat} defaultOpen>
-                          {({ open }) => (
-                            <>
-                              <Disclosure.Button className="flex w-full justify-between rounded-lg bg-gray-800 px-4 py-2 text-left text-sm font-medium text-gray-300 hover:bg-gray-900 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75">  <span>Retail</span>
-                                <ChevronUpIcon
-                                  className={`${
-                                    open ? 'rotate-180 transform' : ''
-                                  } h-5 w-5 text-gray-500`}
-                                />
-                              </Disclosure.Button>
-                              <Transition
-                                enter="transition duration-100 ease-out"
-                                enterFrom="transform scale-95 opacity-0"
-                                enterTo="transform scale-100 opacity-100"
-                                leave="transition duration-75 ease-out"
-                                leaveFrom="transform scale-100 opacity-100"
-                                leaveTo="transform scale-95 opacity-0"
-                              >
-                                <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
-                                  {data.retail.map((r)=> {
-                                    return(
-                                      <li key={r.paymentMethod} className="Customize-Nominal-border">
-                                        <input type="radio" id={r.paymentMethod} name="payment" value={r.paymentMethod} className="hidden peer" required />
-                                        <label htmlFor={r.paymentMethod} className="inline-flex items-start justify-between w-full p-5 text-gray-500 bg-white border Customize-Nominal border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
-                                        <div className="block">
-                                              <div className="w-full ml-3 md:ml-10"><Image alt={r.paymentMethod} src={r.paymentImage} width={95} height={95} /></div>
-                                        </div> 
-                                          <div className="mr-3 mt-3 md:mr-20">Belum ready</div>
-                                        </label>
-                                    </li>
-                                    )
-                                  })}
-                                </Disclosure.Panel>
-                              </Transition>
-                            </>
-                          )}
-                        </Disclosure>
-                      )
-                      if(data.dat == 3)
-                      return(
-                        <Disclosure key={data.dat} defaultOpen>
-                          {({ open }) => (
-                            <>
-                              <Disclosure.Button className="flex w-full justify-between rounded-lg bg-gray-800 px-4 py-2 text-left text-sm font-medium text-gray-300 hover:bg-gray-900 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75">  <span>VA</span>
-                                <ChevronUpIcon
-                                  className={`${
-                                    open ? 'rotate-180 transform' : ''
-                                  } h-5 w-5 text-gray-500`}
-                                />
-                              </Disclosure.Button>
-                              <Transition
-                                enter="transition duration-100 ease-out"
-                                enterFrom="transform scale-95 opacity-0"
-                                enterTo="transform scale-100 opacity-100"
-                                leave="transition duration-75 ease-out"
-                                leaveFrom="transform scale-100 opacity-100"
-                                leaveTo="transform scale-95 opacity-0"
-                              >
-                                <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
-                                  {data.va.map((r)=> {
-                                    return(
-                                      <li key={r.paymentMethod} className="Customize-Nominal-border">
-                                        <input type="radio" id={r.paymentMethod} name="payment" value={r.paymentMethod} className="hidden peer" required />
-                                        <label htmlFor={r.paymentMethod} className="inline-flex items-start justify-between w-full p-5 text-gray-500 bg-white border Customize-Nominal border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
-                                        <div className="block">
-                                              <div className="w-full ml-3 md:ml-10"><Image alt={r.paymentMethod} src={r.paymentImage} width={95} height={95} /></div>
-                                        </div> 
-                                          <div className="mr-3 mt-3 md:mr-20">Belum ready</div>
-                                        </label>
-                                    </li>
-                                    )
-                                  })}
-                                </Disclosure.Panel>
-                              </Transition>
-                            </>
-                          )}
-                        </Disclosure>
+                        {({ open }) => (
+                          <>
+                            <Disclosure.Button className="flex w-full justify-between rounded-lg bg-gray-800 px-4 py-2 text-left text-sm font-medium text-gray-300 hover:bg-gray-900 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75">
+                              <span>{data.name}</span>
+                              <ChevronUpIcon
+                                className={`${
+                                  open ? 'rotate-180 transform' : ''
+                                } h-5 w-5 text-gray-500`}
+                              />
+                            </Disclosure.Button>
+                            <Transition
+                              enter="transition duration-100 ease-out"
+                              enterFrom="transform scale-95 opacity-0"
+                              enterTo="transform scale-100 opacity-100"
+                              leave="transition duration-75 ease-out"
+                              leaveFrom="transform scale-100 opacity-100"
+                              leaveTo="transform scale-95 opacity-0"
+                            >
+                              <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
+                                {data.data.map((r)=> {
+                                  let realPrice = 0
+                                  switch (r.paymentMethod) {
+                                    case "LQ":
+                                      realPrice = nominal.priceSell + Math.round(nominal.priceSell * r.totalFee / 100)
+                                      break;
+                                    case "DA": 
+                                      realPrice = nominal.priceSell + Math.round(nominal.priceSell * r.totalFee / 100)
+                                      break;
+                                    case "NQ":
+                                      realPrice = nominal.priceSell + Math.round(nominal.priceSell * r.totalFee / 100)
+                                      break;
+                                    default:
+                                      realPrice = nominal.priceSell + r.totalFee 
+                                      break;
+                                  }
+                                  return(
+                                    <li key={r.paymentMethod} className="Customize-Nominal-border">
+                                      <input type="radio" id={r.paymentMethod} onChange={()=>onChangePayment(r)} name="payment" value={r.paymentMethod} className="hidden peer" required />
+                                      <label htmlFor={r.paymentMethod} className="inline-flex items-start justify-between w-full p-5 text-gray-500 bg-white border Customize-Nominal border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
+                                      <div className="block">
+                                            <div className="w-full ml-3 md:ml-10"><Image alt={r.paymentMethod} src={r.paymentImage} width={95} height={95} /></div>
+                                      </div> 
+                                        <div className="mr-3 mt-3 md:mr-20 text-lg"><FormatRupiah value={realPrice}/></div>
+                                      </label>
+                                  </li>
+                                  )
+                                })}
+                                
+                              </Disclosure.Panel>
+                            </Transition>
+                          </>
+                        )}
+                      </Disclosure>
                       )
                     })}
                   </div>
                 </div>
+                </Transition>
                 <div className="Customize-bottom"></div>
               </div>
               <div className="mt-3">
