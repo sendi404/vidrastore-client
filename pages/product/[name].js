@@ -1,7 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Image from "next/image";
 import { DesignPage, LandingPages } from "@/services/LandingPage";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Disclosure, Transition } from '@headlessui/react'
 import { ChevronUpIcon } from '@heroicons/react/20/solid'
 import { getDetailVoucher } from "@/services/DetailPage";
@@ -26,28 +26,14 @@ export async function getStaticProps(context) {
   const data = await getDetailVoucher(queryName);
   const design = await DesignPage();
   const payment = await getPaymentGateAway();
-  return {
-    props: { data, design, payment },
-  }
-}
-
-export default function product({data, design, payment}) {
-  const [ nominal, setNominal ] = useState({
-    realPrice: 0
-  });
-  const [price, stPrice] = useState(null);
-  const [ paymentItem, setPaymentItem] = useState(null);
-  const [isShowing, setIsShowing] = useState(false);
-  
   const paymentReal = []
   const ewalet = []
   const retail = []
   const va = []
-  
-  for (let i = 0; i < payment.length; i++) {
-    if (payment[i].paymentMethod == 'DA' || payment[i].paymentMethod == 'NQ' || payment[i].paymentMethod == 'LA' || payment[i].paymentMethod == 'LQ') {
-      const fees = payment[i]
-      switch (payment[i].paymentMethod) {
+  payment.map((data)=> {
+    if (data.paymentMethod == 'DA' || data.paymentMethod == 'NQ' || data.paymentMethod == 'LA' || data.paymentMethod == 'LQ') {
+      const fees = data
+      switch (data.paymentMethod) {
         case 'DA':
           fees.totalFee = 1.7;
           break;
@@ -64,10 +50,10 @@ export default function product({data, design, payment}) {
           fees.totalFee = 0;
           break;
       } 
-      ewalet.push(payment[i])
-    } else if(payment[i].paymentMethod == 'FT') {
-      const fees = payment[i]
-      switch (payment[i].paymentMethod) {
+      ewalet.push(data)
+    } else if(data.paymentMethod == 'FT') {
+      const fees = data
+      switch (data.paymentMethod) {
         case 'FT':
           fees.totalFee = 2500;
           break;
@@ -76,10 +62,10 @@ export default function product({data, design, payment}) {
           fees.totalFee = 0;
           break;
       }
-      retail.push(payment[i])
+      retail.push(data)
     }else {
-      const fees = payment[i]
-      switch (payment[i].paymentMethod) {
+      const fees = data
+      switch (data.paymentMethod) {
         case 'AG':
           fees.totalFee = 1500;
           break;
@@ -90,11 +76,40 @@ export default function product({data, design, payment}) {
           fees.totalFee = 3000;
           break;
       }
-      va.push(payment[i])
+      va.push(data)
     }
-  }
+  })
+ 
   paymentReal.push({"dat":1,"name": "E-Wallet","data":ewalet},{"dat":2,"name": "Retail","data":retail},{"dat":3,"name": "Virtual Account","data":va})
-  const onNominalChange = (val) => {
+  
+  return {
+    props: { data, design, paymentReal },
+  }
+}
+export default function product({data, design, paymentReal}) {
+  const [navbar, setNavbar] = useState({
+    brand: "",
+    brandName: "",
+  });
+  const [voucher, setVoucher] = useState({
+    thumbnail: "",
+    deskripsi: "",
+    name: "",
+    title: "",
+  })
+  const [ nominal, setNominal ] = useState({
+    realPrice: 0
+  });
+  const [price, stPrice] = useState(null);
+  const [ paymentItem, setPaymentItem] = useState(null);
+  const [isShowing, setIsShowing] = useState(false);
+
+  useEffect(()=>{
+    setNavbar(design);
+    setVoucher(data);
+  },[])
+
+ const onNominalChange = (val) => {
     setNominal(val);
   };
   const onChangePayment = (val) => {
@@ -108,7 +123,7 @@ export default function product({data, design, payment}) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/KaweStoreT.png" />
       </Head>
-      <Navbar brands={design.brand} brandNames={design.brandName} />
+      <Navbar brands={navbar.brand} brandNames={navbar.brandName} />
       <div className="min-w-7xl mx-auto px-2 sm:px-6 lg:px-8 pt-20 min-w-7xl md:mx-20">
         <div className="flex md:flex-row flex-col item-center my-10">
           <div className="flex-auto w-full md:w-20 mb-3">
@@ -118,7 +133,7 @@ export default function product({data, design, payment}) {
                   <div className="flex-col m-2">
                     <Image
                       alt="GameVoucher"
-                      src={`https://blog.kawestore.com/uploads/${data.thumbnail}`}
+                      src={`https://blog.kawestore.com/uploads/${voucher.thumbnail}`}
                       width={150}
                       height={150}
                     />
@@ -126,16 +141,16 @@ export default function product({data, design, payment}) {
                   <div className="flex-auto m-2">
                     <div className="grid w-full">
                       <p className="text-sm lg:text-lg md:text-md ">
-                        {data.name}
+                        {voucher.name}
                       </p>
                       <small className="text-sm text-gray-400">
-                        {data.title}
+                        {voucher.title}
                       </small>
                     </div>
                   </div>
                 </div>
                 <div className="flex w-full m-5">
-                  <div dangerouslySetInnerHTML={{ __html: data.deskripsi }} />
+                  <div dangerouslySetInnerHTML={{ __html: voucher.deskripsi }} />
                 </div>
                 <div className="Customize-bottom-layer"></div>
               </div>
@@ -169,6 +184,15 @@ export default function product({data, design, payment}) {
                     />
                   </div>
                 </div>
+                <div className="flex-1 ml-3 mr-3 mt-5 ">
+                    <input
+                      disabled
+                      type="text"
+                      name="zone"
+                      className="mt-1 px-3 py-2 text-blue-500 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
+                      placeholder="name"
+                    />
+                  </div>
                 <div className="Customize-bottom"></div>
               </div>
                 <div className="mt-3">
