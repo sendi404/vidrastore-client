@@ -8,6 +8,8 @@ import { getDetailVoucher } from "@/services/DetailPage";
 import { FormatRupiah } from "@arismun/format-rupiah";
 import { getPaymentGateAway } from "@/services/Payment";
 import Head from "next/head";
+import Footer from "@/components/Footer";
+import InputUserName from "@/components/hook/InputUserName";
 
 export async function getStaticPaths() {
   const landingPage = await LandingPages();
@@ -91,15 +93,18 @@ export default function product({data, design, paymentReal}) {
     brand: "",
     brandName: "",
   });
+  console.log(data);
   const [voucher, setVoucher] = useState({
     thumbnail: "",
     deskripsi: "",
     name: "",
     title: "",
-  })
+    codeVoucher: "",
+  });
   const [ nominal, setNominal ] = useState({
     realPrice: 0
   });
+  const [dataVoucher, setDataVoucher] = useState({})
   const [price, stPrice] = useState(null);
   const [ paymentItem, setPaymentItem] = useState(null);
   const [isShowing, setIsShowing] = useState(false);
@@ -107,7 +112,7 @@ export default function product({data, design, paymentReal}) {
   useEffect(()=>{
     setNavbar(design);
     setVoucher(data);
-  },[])
+  },[design, data])
 
  const onNominalChange = (val) => {
     setNominal(val);
@@ -166,33 +171,10 @@ export default function product({data, design, paymentReal}) {
                     Input Data Game anda
                   </span>
                 </div>
-                <div className="flex flex-row">
-                  <div className="flex-1 ml-3 mt-5 mb-5">
-                    <input
-                      type="number"
-                      name="userID"
-                      className="mt-1 px-3 py-2 text-blue-500 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
-                      placeholder="Masukan User ID"
-                    />
-                  </div>
-                  <div className="flex-1 ml-3 mr-3 mt-5 mb-5">
-                    <input
-                      type="number"
-                      name="zone"
-                      className="mt-1 px-3 py-2 text-blue-500 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
-                      placeholder="Masukan Zone"
-                    />
-                  </div>
-                </div>
-                <div className="flex-1 ml-3 mr-3 mt-5 ">
-                    <input
-                      disabled
-                      type="text"
-                      name="zone"
-                      className="mt-1 px-3 py-2 text-blue-500 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
-                      placeholder="name"
-                    />
-                  </div>
+                <InputUserName
+                id={voucher.codeVoucher}
+                data={setDataVoucher}
+                />
                 <div className="Customize-bottom"></div>
               </div>
                 <div className="mt-3">
@@ -329,6 +311,7 @@ export default function product({data, design, paymentReal}) {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }
