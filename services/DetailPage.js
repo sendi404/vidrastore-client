@@ -13,12 +13,32 @@ const client = axios.create({
     },
 });
 
+export async function getNick(data) {
+    const URL = "players/cekID";
+    const responses = await client.post(`${ROOT_API}/${API_VERSI}/${URL}`, data);
+
+    if (responses.status == 201) {
+        const res = {
+            error: true,
+            message: "Username Tidak Ditemukan",
+            data: "Username Tidak Ditemukan",
+        };
+        return res;
+    }
+    const res = {
+        error: false,
+        message: "Username Ditemukan",
+        data: responses.data.nickGame,
+    };
+
+    return res;
+}
 export async function getDetailVoucher(query) {
-  const URL = `players/${query.replaceAll("-", " ")}/detail`;
+    const URL = `players/${query.replaceAll("-", " ")}/detail`;
 
-  const responses = await client.get(`${ROOT_API}/${API_VERSI}/${URL}`);
+    const responses = await client.get(`${ROOT_API}/${API_VERSI}/${URL}`);
 
-  const axiosResponses = responses.data;
-  const data = axiosResponses.data;
-  return data;
+    const axiosResponses = responses.data;
+    const data = axiosResponses.data;
+    return data;
 }
