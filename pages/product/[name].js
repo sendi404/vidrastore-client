@@ -303,8 +303,8 @@ export default function product({data, design, paymentReal}) {
                   </div>
                 <div className="Customize-bottom"></div>
               </div>
-              <div className="border-2 border-blue-500/100 bg-zinc-900 mt-3">
-                Button
+              <div className="flex ml-3 mr-3 mb-5 mt-3">
+              <button className="bg-blue-500 w-full py-2 cursor-pointer hover:bg-blue-700 text-white font-bold rounded" id="currency" name="currency" type="button" disabled>Order Now</button>
               </div>
             </div>
           </div>
