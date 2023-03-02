@@ -3,7 +3,6 @@ import "@/styles/embla.css";
 import styles from "@/styles/Home.module.css";
 import { Orbitron } from "@next/font/google";
 import { motion, AnimatePresence } from "framer-motion";
-import Head from "next/head";
 
 const orbitron = Orbitron({
   weight: "400",

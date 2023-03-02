@@ -93,7 +93,6 @@ export default function product({data, design, paymentReal}) {
     brand: "",
     brandName: "",
   });
-
   const [voucher, setVoucher] = useState({
     thumbnail: "",
     deskripsi: "",
@@ -120,7 +119,6 @@ export default function product({data, design, paymentReal}) {
   const onChangePayment = (val) => {
     setPaymentItem(val);
   };
-  console.log(dataVoucher);
   return (
     <>
       <Head>
@@ -174,7 +172,7 @@ export default function product({data, design, paymentReal}) {
                 </div>
                 <InputUserName
                 _idGame={voucher.codeVoucher}
-                data={setDataVoucher}
+                dataVoucher={setDataVoucher}
                 />
                 <div className="Customize-bottom"></div>
               </div>
