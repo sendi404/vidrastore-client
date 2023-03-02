@@ -89,29 +89,13 @@ export async function getStaticProps(context) {
   }
 }
 export default function product({data, design, paymentReal}) {
-  const [navbar, setNavbar] = useState({
-    brand: "",
-    brandName: "",
-  });
-  const [voucher, setVoucher] = useState({
-    thumbnail: "",
-    deskripsi: "",
-    name: "",
-    title: "",
-    codeVoucher: "",
-  });
   const [ nominal, setNominal ] = useState({
     realPrice: 0
   });
   const [dataVoucher, setDataVoucher] = useState(null);
-  const [price, stPrice] = useState(null);
+  const [price, setPrice] = useState(null);
   const [ paymentItem, setPaymentItem] = useState(null);
   const [isShowing, setIsShowing] = useState(false);
-
-  useEffect(()=>{
-    setNavbar(design);
-    setVoucher(data);
-  },[design, data])
 
  const onNominalChange = (val) => {
     setNominal(val);
@@ -119,6 +103,9 @@ export default function product({data, design, paymentReal}) {
   const onChangePayment = (val) => {
     setPaymentItem(val);
   };
+  const onOrder = () => {
+    console.log(price);
+  }
   return (
     <>
       <Head>
@@ -127,7 +114,7 @@ export default function product({data, design, paymentReal}) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/KaweStoreT.png" />
       </Head>
-      <Navbar brands={navbar.brand} brandNames={navbar.brandName} />
+      <Navbar brands={design.brand} brandNames={design.brandName} />
       <div className="min-w-7xl mx-auto px-2 sm:px-6 lg:px-8 pt-20 min-w-7xl md:mx-20">
         <div className="flex md:flex-row flex-col item-center my-10">
           <div className="flex-auto w-full md:w-20 mb-3">
@@ -137,7 +124,7 @@ export default function product({data, design, paymentReal}) {
                   <div className="flex-col m-2">
                     <Image
                       alt="GameVoucher"
-                      src={`https://blog.kawestore.com/uploads/${voucher.thumbnail}`}
+                      src={`https://blog.kawestore.com/uploads/${data.thumbnail}`}
                       width={150}
                       height={150}
                     />
@@ -145,16 +132,16 @@ export default function product({data, design, paymentReal}) {
                   <div className="flex-auto m-2">
                     <div className="grid w-full">
                       <p className="text-sm lg:text-lg md:text-md ">
-                        {voucher.name}
+                        {data.name}
                       </p>
                       <small className="text-sm text-gray-400">
-                        {voucher.title}
+                        {data.title}
                       </small>
                     </div>
                   </div>
                 </div>
                 <div className="flex w-full m-5">
-                  <div dangerouslySetInnerHTML={{ __html: voucher.deskripsi }} />
+                  <div dangerouslySetInnerHTML={{ __html: data.deskripsi }} />
                 </div>
                 <div className="Customize-bottom-layer"></div>
               </div>
@@ -171,7 +158,7 @@ export default function product({data, design, paymentReal}) {
                   </span>
                 </div>
                 <InputUserName
-                _idGame={voucher.codeVoucher}
+                _idGame={data.codeVoucher}
                 dataVoucher={setDataVoucher}
                 />
                 <div className="Customize-bottom"></div>
@@ -260,6 +247,7 @@ export default function product({data, design, paymentReal}) {
                                       realPrice = nominal.priceSell + r.totalFee 
                                       break;
                                   }
+                                  setPrice(realPrice)
                                   return(
                                     <li key={r.paymentMethod} className="Customize-Nominal-border">
                                       <input type="radio" id={r.paymentMethod} onChange={()=>onChangePayment(r)} name="payment" value={r.paymentMethod} className="hidden peer" required />
@@ -304,7 +292,7 @@ export default function product({data, design, paymentReal}) {
                 <div className="Customize-bottom"></div>
               </div>
               <div className="flex ml-3 mr-3 mb-5 mt-3">
-              <button className="bg-blue-500 w-full py-2 cursor-pointer hover:bg-blue-700 text-white font-bold rounded" id="currency" name="currency" type="button" disabled>Order Now</button>
+              <button className="bg-blue-500 w-full py-2 cursor-pointer hover:bg-blue-700 text-white font-bold rounded" id="currency" name="currency" type="button" onClick={onOrder}>Order Now</button>
               </div>
             </div>
           </div>
