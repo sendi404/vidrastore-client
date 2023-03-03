@@ -1,15 +1,17 @@
 import Navbar from "@/components/Navbar";
 import Image from "next/image";
 import { DesignPage, LandingPages } from "@/services/LandingPage";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useRouter } from "next/router";
 import { Disclosure, Transition } from '@headlessui/react'
 import { ChevronUpIcon } from '@heroicons/react/20/solid'
 import { getDetailVoucher } from "@/services/DetailPage";
 import { FormatRupiah } from "@arismun/format-rupiah";
-import { getPaymentGateAway } from "@/services/Payment";
+import { cekout, getPaymentGateAway } from "@/services/Payment";
 import Head from "next/head";
 import Footer from "@/components/Footer";
 import InputUserName from "@/components/hook/InputUserName";
+import Swal from 'sweetalert2';
 
 export async function getStaticPaths() {
   const landingPage = await LandingPages();
@@ -89,22 +91,83 @@ export async function getStaticProps(context) {
   }
 }
 export default function product({data, design, paymentReal}) {
-  const [ nominal, setNominal ] = useState({
-    realPrice: 0
-  });
+  const router = useRouter();
+  const [nominal, setNominal ] = useState(null);
   const [dataVoucher, setDataVoucher] = useState(null);
   const [price, setPrice] = useState(null);
-  const [ paymentItem, setPaymentItem] = useState(null);
+  const [paymentItem, setPaymentItem] = useState(null);
+  const [number, setNumber] = useState(null);
   const [isShowing, setIsShowing] = useState(false);
-
  const onNominalChange = (val) => {
     setNominal(val);
   };
-  const onChangePayment = (val) => {
+  const onChangePayment = (val,realPrice) => {
     setPaymentItem(val);
+    setPrice(realPrice)
   };
-  const onOrder = () => {
-    console.log(price);
+  const onchangeNumber = (val) => {
+    setNumber(val.target.value)
+  }
+  const onOrder = async() => {
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer)
+        toast.addEventListener('mouseleave', Swal.resumeTimer)
+      }
+    })
+    if (dataVoucher == null) {
+      Toast.fire({
+        icon: 'error',
+        title: 'Username Anda masih kosong'
+      })
+    } else if (nominal == null) {
+      Toast.fire({
+        icon: 'error',
+        title: 'Anda Belum Memilih Nominal'
+      })
+    } else if (paymentItem == null) {
+      Toast.fire({
+        icon: 'error',
+        title: 'Anda Belum Memilih Payment'
+      })
+    } else if(number == null){
+      Toast.fire({
+        icon: 'error',
+        title: 'No.Wa Anda masih kosong'
+      })
+    } else {
+        const today = new Date();
+        const dd = String(today.getDate()).padStart(2, "0");
+        const mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+        const yyyy = today.getFullYear();
+        const now1 = yyyy + mm + dd;
+        const m = new Date().getMinutes();
+        const s = new Date().getSeconds();
+        const ms = new Date().getMilliseconds();
+        const merchant_ref = "KS" + now1 + "-" + m + s + ms;
+
+        const input = {
+          reference: merchant_ref,
+          payment_method:paymentItem.paymentMethod,
+          array_1:dataVoucher.id,
+          array_2:dataVoucher.zone,
+          username:dataVoucher.username,
+          number_phone:number,
+          id_nominal:nominal._id,
+          id_voucher:data.codeVoucher,
+          id_players:"",
+          totalBill:price
+      }
+      // console.log(input);
+        const result = await cekout(input);
+        console.log(result);
+        router.push(`/order/${result.reference}`)
+    }
   }
   return (
     <>
@@ -183,7 +246,7 @@ export default function product({data, design, paymentReal}) {
                               </div>
                               <svg aria-hidden="true" className="w-6 h-6 ml-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
                           </label>
-                      </li>
+                        </li>
                       )
                     })}
                   </ul>
@@ -247,10 +310,9 @@ export default function product({data, design, paymentReal}) {
                                       realPrice = nominal.priceSell + r.totalFee 
                                       break;
                                   }
-                                  setPrice(realPrice)
                                   return(
                                     <li key={r.paymentMethod} className="Customize-Nominal-border">
-                                      <input type="radio" id={r.paymentMethod} onChange={()=>onChangePayment(r)} name="payment" value={r.paymentMethod} className="hidden peer" required />
+                                      <input type="radio" id={r.paymentMethod} onChange={()=>onChangePayment(r,realPrice)} name="payment" value={r.paymentMethod} className="hidden peer" required />
                                       <label htmlFor={r.paymentMethod} className="inline-flex items-start justify-between w-full p-5 text-gray-500 bg-white border Customize-Nominal border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
                                       <div className="block">
                                             <div className="w-full ml-3 md:ml-10"><Image alt={r.paymentMethod} src={r.paymentImage} width={95} height={95} /></div>
@@ -285,6 +347,7 @@ export default function product({data, design, paymentReal}) {
                     <input
                       type="number"
                       name="userID"
+                      onChange={(e) => onchangeNumber(e)}
                       className="mt-1 px-3 py-2 text-blue-500 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
                       placeholder="Nomor WA Aktif cth.6281283111111"
                     />

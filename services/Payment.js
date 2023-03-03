@@ -21,3 +21,11 @@ export async function getPaymentGateAway() {
     
     return axiosResponses
 }
+export async function cekout(data) {
+    const URL = 'players/checkOut'
+    
+    const responses = await client.post(`${ROOT_API}/${API_VERSI}/${URL}`,data)
+    const axiosResponses = responses.data;
+    
+    return axiosResponses.data
+}
