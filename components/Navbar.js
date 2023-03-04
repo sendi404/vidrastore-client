@@ -1,8 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
+import BranchImage from "../public/ImageBranch.png";
 import { Disclosure, Transition } from "@headlessui/react";
 import { Bars3CenterLeftIcon, XMarkIcon } from "@heroicons/react/24/solid";
 
+const branch = process.env.NEXT_PUBLIC_BRANCH;
 const navigation = [
   { name: "Home", href: "/", current: true },
   { name: "Dashboard", href: "#", current: false },
@@ -14,8 +16,7 @@ function className(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Navbar(data) {
-  const { brands, brandNames } = data;
+export default function Navbar() {
   return (
     <Disclosure as="nav" className="bg-black fixed left-0 right-0 top-0 z-50">
       {({ open }) => (
@@ -42,14 +43,14 @@ export default function Navbar(data) {
               <div className="flex-1 flex item-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex shrink-0 items-center ">
                   <Image
-                    src={`https://blog.kawestore.com/uploads/${brands}`}
+                    src={BranchImage}
                     width={45}
                     height={45}
                     className="logo cursor-pointer"
                     alt="logo"
                   />
                   <h1 className="font-semibold text-xl cursor-pointer bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-violet-500">
-                    {brandNames}
+                    {branch}
                   </h1>
                 </div>
                 <div className="hidden md:block sm:block sm:ml-6 md:ml-60">

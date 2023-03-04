@@ -29,3 +29,12 @@ export async function cekout(data) {
     
     return axiosResponses.data
 }
+export async function getDetailPayment(reference) {
+    const URL = `players/${reference}/transaction`;
+
+    const responses = await client.get(`${ROOT_API}/${API_VERSI}/${URL}`);
+
+    const axiosResponses = responses.data;
+    const data = axiosResponses.data;
+    return data;
+}

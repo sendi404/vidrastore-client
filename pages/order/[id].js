@@ -1,12 +1,17 @@
+import { getDetailPayment } from "@/services/Payment";
 import React from "react";
 export async function getServerSideProps(context) {
-    const data = context.query.id
-    return {
-      props: {data}, 
-    }
-  }
+  const reference = context.query.id;
+  const data = await getDetailPayment(reference);
+  return {
+    props: { data },
+  };
+}
 export default function CekoutMenu({ data }) {
-    return(
-        <h1>HALLO {data}</h1>
-    )
+  console.log(data);
+  return (
+    <div>
+      <h1>HALLO </h1>
+    </div>
+  );
 }

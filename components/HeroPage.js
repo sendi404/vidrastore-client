@@ -1,6 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
-import HeroIMage from "../public/KaweStoreT.png"
+import BranchImage from "../public/ImageBranch.png"
 
 export default function HeroPage() {
   return (
@@ -19,7 +19,7 @@ export default function HeroPage() {
                 </button>
             </div>
             <div className="px-10">
-                <Image alt="ImageHero" src={HeroIMage} width={900} height={900}/>
+                <Image alt="ImageHero" src={BranchImage} width={900} height={900}/>
             </div>
         </nav>
     </div>
