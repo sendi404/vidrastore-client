@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { DesignPage, LandingPages } from "@/services/LandingPage";
+import { LandingPages } from "@/services/LandingPage";
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { Disclosure, Transition } from '@headlessui/react'
@@ -25,7 +25,6 @@ export async function getStaticPaths() {
 export async function getStaticProps(context) {
   const queryName = context.params.name;
   const data = await getDetailVoucher(queryName);
-  const design = await DesignPage();
   const payment = await getPaymentGateAway();
   const paymentReal = []
   const ewalet = []
@@ -84,10 +83,10 @@ export async function getStaticProps(context) {
   paymentReal.push({"dat":1,"name": "E-Wallet","data":ewalet},{"dat":2,"name": "Retail","data":retail},{"dat":3,"name": "Virtual Account","data":va})
   
   return {
-    props: { data, design, paymentReal },
+    props: { data, paymentReal },
   }
 }
-export default function product({data, design, paymentReal}) {
+export default function product({data, paymentReal}) {
   const router = useRouter();
   const [nominal, setNominal ] = useState(null);
   const [dataVoucher, setDataVoucher] = useState(null);
@@ -153,6 +152,7 @@ export default function product({data, design, paymentReal}) {
         const input = {
           reference: merchant_ref,
           payment_method:paymentItem.paymentMethod,
+          payment_name: paymentItem.paymentName,
           array_1:dataVoucher.id,
           array_2:dataVoucher.zone,
           username:dataVoucher.username,
