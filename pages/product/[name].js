@@ -319,7 +319,7 @@ export default function product({data, design, paymentReal}) {
                                           const disc = realPrice - Math.round(nominal.discount * realPrice / 100)
                                           return(
                                             <li key={r.paymentMethod} className="Customize-Nominal-border">
-                                              <input type="radio" id={r.paymentMethod} onChange={()=>onChangePayment(r,realPrice)} name="payment" value={r.paymentMethod} className="hidden peer" required />
+                                              <input type="radio" id={r.paymentMethod} onChange={()=>onChangePayment(r,disc)} name="payment" value={r.paymentMethod} className="hidden peer" required />
                                               <label htmlFor={r.paymentMethod} className="inline-flex items-start justify-between w-full p-2 text-gray-500 bg-white border Customize-Nominal border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
                                               <div className="flex flex-col">
                                                    {i == 0 && <HandThumbUpIcon className="ml-7 md:ml-20 h-5 w-5 text-gray-500" />} 
