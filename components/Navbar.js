@@ -7,8 +7,8 @@ import { Bars3CenterLeftIcon, XMarkIcon } from "@heroicons/react/24/solid";
 const branch = process.env.NEXT_PUBLIC_BRANCH;
 const navigation = [
   { name: "Home", href: "/", current: true },
-  { name: "Dashboard", href: "#", current: false },
   { name: "Jasa Joki", href: "#", current: false },
+  { name: "Calcu ML", href: "/calc/Point-Magic-Whell", current: false },
   { name: "Login", href: "#", current: false },
 ];
 

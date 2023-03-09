@@ -1,5 +1,5 @@
 import React from "react";
-import { FaInstagram, FaTwitter, FaLinkedin, FaYoutube } from "react-icons/fa";
+import { FaInstagram, FaTwitter, FaLinkedin, FaYoutube,FaWhatsapp, FaEnvelope } from "react-icons/fa";
 const branch = process.env.NEXT_PUBLIC_BRANCH;
 
 export default function Footer() {
@@ -21,7 +21,7 @@ export default function Footer() {
         </div>
         <div className="p-5">
           <ul>
-            <p className="text-gray-800 font-bold text-2xl pb-4">Product</p>
+            <p className="text-gray-800 font-bold text-2xl pb-4">Site Map</p>
             <li className="text-gray-500 text-sm pb-2 font-semibold hover:text-blue-600 cursor-pointer">
               Web Apps
             </li>
@@ -38,36 +38,24 @@ export default function Footer() {
         </div>
         <div className="p-5">
           <ul>
-            <p className="text-gray-800 font-bold text-2xl pb-4">Product</p>
-            <li className="text-gray-500 text-sm pb-2 font-semibold hover:text-blue-600 cursor-pointer">
-              Web Apps
-            </li>
-            <li className="text-gray-500 text-sm pb-2 font-semibold hover:text-blue-600 cursor-pointer">
-              Apps
-            </li>
-            <li className="text-gray-500 text-sm pb-2 font-semibold hover:text-blue-600 cursor-pointer">
-              Color Generator
-            </li>
-            <li className="text-gray-500 text-sm pb-2 font-semibold hover:text-blue-600 cursor-pointer">
-              Themes
-            </li>
-          </ul>
-        </div>
-        <div className="p-5">
-          <ul>
-            <p className="text-gray-800 font-bold text-2xl pb-4">Product</p>
-            <li className="text-gray-500 text-sm pb-2 font-semibold hover:text-blue-600 cursor-pointer">
-              Web Apps
-            </li>
-            <li className="text-gray-500 text-sm pb-2 font-semibold hover:text-blue-600 cursor-pointer">
-              Apps
-            </li>
-            <li className="text-gray-500 text-sm pb-2 font-semibold hover:text-blue-600 cursor-pointer">
-              Color Generator
-            </li>
-            <li className="text-gray-500 text-sm pb-2 font-semibold hover:text-blue-600 cursor-pointer">
-              Themes
-            </li>
+            <p className="text-gray-800 font-bold text-2xl pb-4">Whatsapp Support</p>
+            <a target={"_blank"} href="https://web.whatsapp.com/send/?phone=6281283093544&text=Halo+KaweStore&type=phone_number&app_absent=0">
+              <li className="text-gray-500 text-sm pb-2 font-semibold cursor-pointer  hover:text-blue-600">
+                <div className="flex">
+                  <FaWhatsapp className="text-2xl cursor-pointer text-gray-500 text-green-400" />
+                  +62 812 8309 3544
+                </div>
+              </li>
+            </a>
+            <p className="text-gray-800 font-bold text-2xl pb-4">Email Support</p>
+            <a target={"_blank"} href="https://web.whatsapp.com/send/?phone=6281283093544&text=Halo+KaweStore&type=phone_number&app_absent=0">
+              <li className="text-gray-500 text-sm pb-2 font-semibold cursor-pointer hover:text-blue-600">
+                <div className="flex">
+                  <FaEnvelope className="text-2xl cursor-pointer text-gray-500 text-red-300" />
+                  &nbsp;sendimuhamad01@gmail.com
+                </div>
+              </li>
+            </a>
           </ul>
         </div>
       </div>
