@@ -19,7 +19,7 @@ export default function HeroPage() {
                 </button>
             </div>
             <div className="px-10">
-                <Image alt="ImageHero" src={BranchImage} width={900} height={900}/>
+                <Image alt="ImageHero" src={BranchImage} width={250} height={250}/>
             </div>
         </nav>
     </div>

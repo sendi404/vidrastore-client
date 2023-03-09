@@ -10,7 +10,7 @@ export default function Information() {
       <h2 className="text-center text-5xl">
         Contact <span className="font-bold">Us</span>
       </h2>
-      <p className='p2-6 text-xl md"mx-40 mx-10 text-center text-blue-500'>
+      <p className='p-6 text-xl md:mx-40 mx-10 text-center text-blue-500'>
         Have a great idea? Lets touche in the cofee in us
       </p>
       <div className="flex justify-center items-center gap-10">
