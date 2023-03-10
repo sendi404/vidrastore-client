@@ -8,11 +8,11 @@ export async function getServerSideProps(context) {
   const reference = context.query.id;
   const data = await getDetailPayment(reference);
   return {
-    props: { data },
+    props: { data }
   };
 }
 export default function CekoutMenu({ data }) {
-  console.log(data);
+  const [response, setResponse] = useState(data);
   const [statusPaid, setStatusPaid] = useState("PENDING");
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
@@ -21,7 +21,7 @@ export default function CekoutMenu({ data }) {
   var d = new Date(data.expired_time * 1000);
   var s = d.getHours() + ":" + d.getMinutes() + ", " + d.toDateString();
   const URL = `https://api.qrserver.com/v1/create-qr-code/?data=${data.historyPayment.qrString}&size=100x100`;
-  const onCopy = (val) =>{
+  const onCopy = (val) => {
     navigator.clipboard.writeText(val.target.outerText);
     const Toast = Swal.mixin({
       toast: true,
@@ -39,31 +39,34 @@ export default function CekoutMenu({ data }) {
       title: 'Text Berhasil di Copy'
     })
   }
-  useEffect(() => {
+  
+  const interval = setInterval(() => {
     const exptime = new Date(data.expired_time * 1000);
-    const interval = setInterval(() => {
-      const now = new Date();
-      const difference = exptime.getTime() - now.getTime();
-      const d = Math.floor(difference / (1000 * 60 * 60 * 24));
-      setDays(d);
+    const now = new Date();
+    const difference = exptime.getTime() - now.getTime();
+    const d = Math.floor(difference / (1000 * 60 * 60 * 24));
+    setDays(d);
 
-      const h = Math.floor(
-        (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-      );
-      setHours(h);
+    const h = Math.floor(
+      (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    );
+    setHours(h);
 
-      const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-      setMinutes(m);
+    const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+    setMinutes(m);
 
-      const s = Math.floor((difference % (1000 * 60)) / 1000);
-      setSeconds(s);
+    const s = Math.floor((difference % (1000 * 60)) / 1000);
+    setSeconds(s);
 
-      if (d <= 0 && h <= 0 && m <= 0 && s <= m) {
-        setStatusPaid("EXPIRED");
-      }
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [data.expired_time]);
+    if (d <= 0 && h <= 0 && m <= 0 && s <= m) {
+      setStatusPaid("EXPIRED");
+    }
+  }, 1000);
+  useEffect(() => {
+    clearInterval(interval);
+    setResponse(data)
+  }, [data]);
+  console.log(response);
   return (
     <div className="min-w-7xl mx-auto px-2 sm:px-6 lg:px-8 pt-20 min-w-7xl md:mx-20">
       <div className="flex md:flex-row flex-col item-center my-10">
@@ -125,37 +128,37 @@ export default function CekoutMenu({ data }) {
                 <div className="col-span-2">No.WA</div>
                 <div className="col-span-4">{data.buyers.numberPhone}</div>
                 <div className="col-span-2">Status Bayar</div>
-                <div className="col-span-4">{data.statusBayar}</div>
+                {data.statusBayar == "UNPAID" ? <div className="col-span-4"><span className="bg-yellow-500 px-2 py-1">{data.statusBayar}</span></div> : data.statusBayar == "PAID" ? <div className="col-span-4"><span className="bg-green-500 px-2 py-1">{data.statusBayar}</span></div> : <div className="col-span-4"><span className="px-2 py-1 bg-red-500">{data.statusBayar}</span></div>}
                 <div className="col-span-2">Status Order</div>
-                <div className="col-span-4">{data.statusOrder}</div>
+                {data.statusOrder == "PENDING" ? <div className="col-span-4"><span className="bg-yellow-500 px-2 py-1">{data.statusOrder}</span></div> : data.statusOrder == "SUCCESS" ? <div className="col-span-4"><span className="bg-green-500 px-2 py-1">{data.statusOrder}</span></div> : <div className="col-span-4"><span className="px-2 py-1 bg-red-500">{data.statusOrder}</span></div>}  
               </div>
               <div className="Customize-bottom"></div>
             </div>
             <div className="mt-3">
               <div className="flex bg-blue-500 flex-1 mt-5 mb-5 cursor-pointer rounded-lg">
-                <div class="flex justify-between flex-row w-full ml-3">
+                <div className="flex justify-between flex-row w-full ml-3">
                   <div className="flex flex-col">
                     <div className="mt-2 text-lg font-bold underline">{data.historyPayment.pay_name}</div>
                     <div className="mt-3">Batas Pembayaran</div>
                     <div className="mb-2">{s}</div>
                     <div className="grid grid-cols-6 gap-4 mt-5">
                       <div className="col-span-2">Tagihan Anda</div>
-                      <div className="col-span-4"><FormatRupiah value={data.totalBill}/></div>
+                      <div className="col-span-4"><FormatRupiah value={data.totalBill} /></div>
                     </div>
                     {statusPaid != "PENDING" ? <a
                       href={`/product/${data.historyVoucherTopup.gameName.replace(/ /g, "-")}`}
                       className="mt-5 text-blue-700 font-light underline hover:text-blue-900"
-                    >Beli Lagi</a>:
-                    <>
-                    <div className="grid grid-cols-6 gap-4 mt-5">
-                      <div className="col-span-2">Kode QR</div>
-                      <div className="col-span-4"><Image alt="QR" width={100} height={100} src={URL}/></div>
-                    </div>
-                    <div className="grid grid-cols-6 gap-4 mt-5">
-                      <div className="col-span-2">Nama Penerima</div>
-                      <div className="col-span-4">KaweStore</div>
-                    </div>
-                    </>}
+                    >Beli Lagi</a> :
+                      <>
+                        <div className="grid grid-cols-6 gap-4 mt-5">
+                          <div className="col-span-2">Kode QR</div>
+                          <div className="col-span-4"><Image alt="QR" width={100} height={100} src={URL} /></div>
+                        </div>
+                        <div className="grid grid-cols-6 gap-4 mt-5">
+                          <div className="col-span-2">Nama Penerima</div>
+                          <div className="col-span-4">KaweStore</div>
+                        </div>
+                      </>}
                   </div>
                   <div className="mr-3 mt-10">
                     {statusPaid == "PENDING"
@@ -172,7 +175,7 @@ export default function CekoutMenu({ data }) {
                   Ketentuan Berlaku
                 </span>
               </div>
-              <ul class="list-disc ml-7 mb-5">
+              <ul className="list-disc ml-7 mb-5">
                 <li>Harap Copy atau ScreenShot No.Pesanan untuk bukti jika terjadi kendala</li>
                 <li>Pesanan akan diproses secepat mungkin jika sudah menyelesaikan pembayaran</li>
                 <li>Jumlah pembayaran harus sesuai dengan jumlah bayar yang tertera</li>
