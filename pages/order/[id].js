@@ -42,32 +42,35 @@ export default function CekoutMenu({ data }) {
       title: 'Text Berhasil di Copy'
     })
   }
-  const interval = setInterval(() => {
-    const exptime = new Date(data.expired_time * 1000);
-    const now = new Date();
-    const difference = exptime.getTime() - now.getTime();
-    const d = Math.floor(difference / (1000 * 60 * 60 * 24));
-    setDays(d);
-
-    const h = Math.floor(
-      (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-    );
-    setHours(h);
-
-    const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-    setMinutes(m);
-
-    const s = Math.floor((difference % (1000 * 60)) / 1000);
-    setSeconds(s);
-
   
-  }, 1000);
   useEffect(() => {
-    clearInterval(interval);
+    const exptime = new Date(data.expired_time * 1000);
+    const interval = setInterval(() => {
+      const now = new Date();
+      const difference = exptime.getTime() - now.getTime();
+      const d = Math.floor(difference / (1000 * 60 * 60 * 24));
+      setDays(d);
+
+      const h = Math.floor(
+        (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      );
+      setHours(h);
+
+      const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+      setMinutes(m);
+
+      const s = Math.floor((difference % (1000 * 60)) / 1000);
+      setSeconds(s);
+
+      if (d <= 0 && h <= 0 && m <= 0 && s <= m) {
+        setStatusPaid("EXPIRED");
+      }
+    }, 1000);
     getStatusPayment(data.reference).then((res)=> 
     setResponse(res)
     )
-  }, [data.reference, interval]);
+    return () => clearInterval(interval);
+  }, [data.expired_time, data.reference]);
   return (
     <div className="min-w-7xl mx-auto px-2 sm:px-6 lg:px-8 pt-20 min-w-7xl md:mx-20">
       <div className="flex md:flex-row flex-col item-center my-10">
