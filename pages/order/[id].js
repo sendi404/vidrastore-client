@@ -12,10 +12,10 @@ export async function getServerSideProps(context) {
     props: { data }
   };
 }
-export default function CekoutMenu({ data }) {
+export default function CekoutMenu({ data }) { 
   const [response, setResponse] = useState({
-    statusBayar: "WAIT",
-    statusOrder: "WAIT",
+    statusBayar: "WAIT..",
+    statusOrder: "WAIT..",
   }); 
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
