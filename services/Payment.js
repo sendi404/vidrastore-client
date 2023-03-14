@@ -38,3 +38,15 @@ export async function getDetailPayment(reference) {
     const data = axiosResponses.data;
     return data;
 }
+export async function getStatusPayment(ref) {
+    const URL = `players/${ref}/transaction`;
+
+    const responses = await client.get(`${ROOT_API}/${API_VERSI}/${URL}`);
+
+    const axiosResponses = responses.data;
+    const data = {
+        statusBayar:axiosResponses.data.statusBayar,
+        statusOrder:axiosResponses.data.statusOrder,
+    }
+    return data;
+}

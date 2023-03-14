@@ -1,4 +1,4 @@
-import { getDetailPayment } from "@/services/Payment";
+import { getDetailPayment, getStatusPayment } from "@/services/Payment";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { FormatRupiah } from "@arismun/format-rupiah";
@@ -12,8 +12,11 @@ export async function getServerSideProps(context) {
   };
 }
 export default function CekoutMenu({ data }) {
-  const [response, setResponse] = useState(data);
-  const [statusPaid, setStatusPaid] = useState("PENDING");
+  const [response, setResponse] = useState({
+    statusBayar: data.statusBayar,
+    statusOrder: data.statusOrder,
+  });
+  const [statusPaid, setStatusPaid] = useState("UNPAID");
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
@@ -39,7 +42,6 @@ export default function CekoutMenu({ data }) {
       title: 'Text Berhasil di Copy'
     })
   }
-  
   const interval = setInterval(() => {
     const exptime = new Date(data.expired_time * 1000);
     const now = new Date();
@@ -58,15 +60,18 @@ export default function CekoutMenu({ data }) {
     const s = Math.floor((difference % (1000 * 60)) / 1000);
     setSeconds(s);
 
-    if (d <= 0 && h <= 0 && m <= 0 && s <= m) {
+    if (d <= 0 && h <= 0 && m <= 0 && s <= m && response.statusBayar == 'UNPAID') {
       setStatusPaid("EXPIRED");
+    } else if(d <= 0 && h <= 0 && m <= 0 && s <= m && response.statusBayar == 'PAID') {
+      setStatusPaid("PAID");
     }
   }, 1000);
   useEffect(() => {
     clearInterval(interval);
-    setResponse(data)
-  }, [data]);
-  console.log(response);
+    getStatusPayment(data.reference).then((res)=> 
+    setResponse(res)
+    )
+  }, [data.reference, interval]);
   return (
     <div className="min-w-7xl mx-auto px-2 sm:px-6 lg:px-8 pt-20 min-w-7xl md:mx-20">
       <div className="flex md:flex-row flex-col item-center my-10">
@@ -128,9 +133,9 @@ export default function CekoutMenu({ data }) {
                 <div className="col-span-2">No.WA</div>
                 <div className="col-span-4">{data.buyers.numberPhone}</div>
                 <div className="col-span-2">Status Bayar</div>
-                {data.statusBayar == "UNPAID" ? <div className="col-span-4"><span className="bg-yellow-500 px-2 py-1">{data.statusBayar}</span></div> : data.statusBayar == "PAID" ? <div className="col-span-4"><span className="bg-green-500 px-2 py-1">{data.statusBayar}</span></div> : <div className="col-span-4"><span className="px-2 py-1 bg-red-500">{data.statusBayar}</span></div>}
+                {response.statusBayar == "UNPAID" ? <div className="col-span-4"><span className="bg-yellow-500 px-2 py-1">{response.statusBayar}</span></div> : response.statusBayar == "PAID" ? <div className="col-span-4"><span className="bg-green-500 px-2 py-1">{response.statusBayar}</span></div> : <div className="col-span-4"><span className="px-2 py-1 bg-red-500">{response.statusBayar}</span></div>}
                 <div className="col-span-2">Status Order</div>
-                {data.statusOrder == "PENDING" ? <div className="col-span-4"><span className="bg-yellow-500 px-2 py-1">{data.statusOrder}</span></div> : data.statusOrder == "SUCCESS" ? <div className="col-span-4"><span className="bg-green-500 px-2 py-1">{data.statusOrder}</span></div> : <div className="col-span-4"><span className="px-2 py-1 bg-red-500">{data.statusOrder}</span></div>}  
+                {response.statusOrder == "PENDING" ? <div className="col-span-4"><span className="bg-yellow-500 px-2 py-1">{response.statusOrder}</span></div> : response.statusOrder == "SUCCESS" ? <div className="col-span-4"><span className="bg-green-500 px-2 py-1">{response.statusOrder}</span></div> : <div className="col-span-4"><span className="px-2 py-1 bg-red-500">{response.statusOrder}</span></div>}  
               </div>
               <div className="Customize-bottom"></div>
             </div>
