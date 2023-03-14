@@ -60,11 +60,7 @@ export default function CekoutMenu({ data }) {
     const s = Math.floor((difference % (1000 * 60)) / 1000);
     setSeconds(s);
 
-    if (d <= 0 && h <= 0 && m <= 0 && s <= m && response.statusBayar == 'UNPAID') {
-      setStatusPaid("EXPIRED");
-    } else if(d <= 0 && h <= 0 && m <= 0 && s <= m && response.statusBayar == 'PAID') {
-      setStatusPaid("PAID");
-    }
+  
   }, 1000);
   useEffect(() => {
     clearInterval(interval);
@@ -150,10 +146,12 @@ export default function CekoutMenu({ data }) {
                       <div className="col-span-2">Tagihan Anda</div>
                       <div className="col-span-4"><FormatRupiah value={data.totalBill} /></div>
                     </div>
-                    {statusPaid != "UNPAID" ? <a
+                    {
+                      response.statusBayar == "PAID" || response.statusBayar == "UNPAID" && days <= 0 && hours <= 0  && minutes <= 0 && second <=0 ?
+                      <a
                       href={`/product/${data.historyVoucherTopup.gameName.replace(/ /g, "-")}`}
                       className="mt-5 text-blue-700 font-light underline hover:text-blue-900"
-                    >Beli Lagi</a> :
+                      >Beli Lagi</a> :
                       <>
                         <div className="grid grid-cols-6 gap-4 mt-5">
                           <div className="col-span-2">Kode QR</div>
@@ -163,12 +161,16 @@ export default function CekoutMenu({ data }) {
                           <div className="col-span-2">Nama Penerima</div>
                           <div className="col-span-4">KaweStore</div>
                         </div>
-                      </>}
+                      </>
+                    }
+                    
                   </div>
                   <div className="mr-3 mt-10">
-                    {statusPaid == "UNPAID"
-                      ? `${days}:${hours}:${minutes}:${second}`
-                      : statusPaid}
+                    {
+                     response.statusBayar == "UNPAID" && days <= 0 && hours <= 0  && minutes <= 0 && second <=0
+                      ? "EXPIRED"
+                      : response.statusBayar == "UNPAID" 
+                      ? `${days}:${hours}:${minutes}:${second}` : response.statusBayar  }
                   </div>
                 </div>
               </div>
