@@ -92,7 +92,7 @@ export default function product({data, paymentReal}) {
   const [dataVoucher, setDataVoucher] = useState(null);
   const [price, setPrice] = useState(null);
   const [paymentItem, setPaymentItem] = useState(null);
-  const [number, setNumber] = useState(null);
+  const [number, setNumber] = useState("");
   const [isShowing, setIsShowing] = useState(false);
   const [order, setIsOrder] = useState(false);
  const onNominalChange = (val) => {
@@ -103,7 +103,14 @@ export default function product({data, paymentReal}) {
     setPrice(realPrice)
   };
   const onchangeNumber = (val) => {
-    setNumber(val.target.value)
+    const toEnamDua =
+    val.target.value === "0" && val.target.value.length < 2;
+    if (toEnamDua == true) {
+      const phone = val.target.value.replace("0", "62");
+      setNumber(phone);
+    } else {
+      setNumber(val.target.value);
+    }
   }
   const onOrder = async() => {
     const Toast = Swal.mixin({
@@ -132,10 +139,10 @@ export default function product({data, paymentReal}) {
         icon: 'error',
         title: 'Anda Belum Memilih Payment'
       })
-    } else if(number == null){
+    } else if(number == "" || number.startsWith("62") || number.length < 9){
       Toast.fire({
         icon: 'error',
-        title: 'No.Wa Anda masih kosong'
+        title: 'No.Wa Anda masih kosong / wajib (62)'
       })
     } else {
         setIsOrder(true)
@@ -421,6 +428,7 @@ export default function product({data, paymentReal}) {
                     <input
                       type="number"
                       name="userID"
+                      value={number}
                       onChange={(e) => onchangeNumber(e)}
                       className="mt-1 px-3 py-2 text-blue-500 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
                       placeholder="Nomor WA Aktif cth.6281283111111"
