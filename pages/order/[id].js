@@ -150,7 +150,7 @@ export default function CekoutMenu({ data }) {
                       <div className="col-span-2">Tagihan Anda</div>
                       <div className="col-span-4"><FormatRupiah value={data.totalBill} /></div>
                     </div>
-                    {statusPaid != "PENDING" ? <a
+                    {statusPaid != "UNPAID" ? <a
                       href={`/product/${data.historyVoucherTopup.gameName.replace(/ /g, "-")}`}
                       className="mt-5 text-blue-700 font-light underline hover:text-blue-900"
                     >Beli Lagi</a> :
@@ -166,7 +166,7 @@ export default function CekoutMenu({ data }) {
                       </>}
                   </div>
                   <div className="mr-3 mt-10">
-                    {statusPaid == "PENDING"
+                    {statusPaid == "UNPAID"
                       ? `${days}:${hours}:${minutes}:${second}`
                       : statusPaid}
                   </div>
