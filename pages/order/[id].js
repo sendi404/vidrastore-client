@@ -62,13 +62,11 @@ export default function CekoutMenu({ data }) {
       const s = Math.floor((difference % (1000 * 60)) / 1000);
       setSeconds(s);
 
-      if (d <= 0 && h <= 0 && m <= 0 && s <= m) {
-        setStatusPaid("EXPIRED");
-      }
+      getStatusPayment(data.reference).then((res)=> 
+      setResponse(res)
+      )
     }, 1000);
-    getStatusPayment(data.reference).then((res)=> 
-    setResponse(res)
-    )
+   
     return () => clearInterval(interval);
   }, [data.expired_time, data.reference]);
   return (
