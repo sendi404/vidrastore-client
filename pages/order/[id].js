@@ -3,6 +3,7 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { FormatRupiah } from "@arismun/format-rupiah";
 import Swal from 'sweetalert2';
+import MetodeBayar from "@/components/hook/MetodeBayar";
 
 export async function getServerSideProps(context) {
   const reference = context.query.id;
@@ -13,10 +14,9 @@ export async function getServerSideProps(context) {
 }
 export default function CekoutMenu({ data }) {
   const [response, setResponse] = useState({
-    statusBayar: data.statusBayar,
-    statusOrder: data.statusOrder,
-  });
-  const [statusPaid, setStatusPaid] = useState("UNPAID");
+    statusBayar: "WAIT",
+    statusOrder: "WAIT",
+  }); 
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
@@ -154,14 +154,12 @@ export default function CekoutMenu({ data }) {
                       className="mt-5 text-blue-700 font-light underline hover:text-blue-900"
                       >Beli Lagi</a> :
                       <>
-                        <div className="grid grid-cols-6 gap-4 mt-5">
-                          <div className="col-span-2">Kode QR</div>
-                          <div className="col-span-4"><Image alt="QR" width={100} height={100} src={URL} /></div>
-                        </div>
-                        <div className="grid grid-cols-6 gap-4 mt-5">
-                          <div className="col-span-2">Nama Penerima</div>
-                          <div className="col-span-4">KaweStore</div>
-                        </div>
+                        <MetodeBayar 
+                        code={data.historyPayment.code}
+                        qr_url={URL}
+                        pay_url={data.historyPayment.pay_url}
+                        pay_code={data.historyPayment.pay_code}
+                        />
                       </>
                     }
                     
