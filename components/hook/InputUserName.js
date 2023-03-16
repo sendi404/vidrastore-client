@@ -65,7 +65,6 @@ export default function InputUserName(props) {
       }
     }
   }
-
   const onchangeZONE = (e) => {
     setZone(e.target.value)
   }
@@ -73,12 +72,19 @@ export default function InputUserName(props) {
   const onchangeID = (e) => {
     setID(e.target.value)
   }
-  if (_idGame == "1") {
+  if (_idGame == "1") 
     return (
-      <>
-      </>
+      <div className="flex flex-row">
+        <div className="flex-1 ml-3 mt-5 mb-5">
+        <input
+              type="text"
+              name="userID"
+              className="mt-1 px-3 py-2 text-blue-500 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
+              placeholder="TIDAK PERLU INPUT"
+            />
+        </div>
+      </div>
     )
-  }
   if (_idGame == "93")
     return (
       <>

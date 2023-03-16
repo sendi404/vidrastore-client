@@ -42,7 +42,7 @@ export default function Footer() {
             <a target={"_blank"} rel="noreferrer" href="https://web.whatsapp.com/send/?phone=6281283093544&text=Halo+KaweStore&type=phone_number&app_absent=0">
               <li className="text-gray-500 text-sm pb-2 font-semibold cursor-pointer  hover:text-blue-600">
                 <div className="flex">
-                  <FaWhatsapp className="text-2xl cursor-pointer text-gray-500 text-green-400" />
+                  <FaWhatsapp className="text-2xl cursor-pointer text-green-400" />
                   +62 812 8309 3544
                 </div>
               </li>
@@ -51,7 +51,7 @@ export default function Footer() {
             <a target={"_blank"} rel="noreferrer" href="https://web.whatsapp.com/send/?phone=6281283093544&text=Halo+KaweStore&type=phone_number&app_absent=0">
               <li className="text-gray-500 text-sm pb-2 font-semibold cursor-pointer hover:text-blue-600">
                 <div className="flex">
-                  <FaEnvelope className="text-2xl cursor-pointer text-gray-500 text-red-300" />
+                  <FaEnvelope className="text-2xl cursor-pointer text-red-300" />
                   &nbsp;sendimuhamad01@gmail.com
                 </div>
               </li>

@@ -9,6 +9,7 @@ import { FormatRupiah } from "@arismun/format-rupiah";
 import { cekout, getPaymentGateAway } from "@/services/Payment";
 import InputUserName from "@/components/hook/InputUserName";
 import Swal from 'sweetalert2';
+import Nominal from "@/components/hook/Nominal";
 
 export async function getStaticPaths() {
   const landingPage = await LandingPages();
@@ -97,6 +98,14 @@ export default function product({data, paymentReal}) {
   const [order, setIsOrder] = useState(false);
  const onNominalChange = (val) => {
     setNominal(val);
+    if (data.codeVoucher == '1') {
+      const dataID = {
+        id: "YT",
+        zone: "PRE",
+        username: "YOUTUBE PREMIUM"
+      }
+      setDataVoucher(dataID)
+    }
   };
   const onChangePayment = (val,realPrice) => {
     setPaymentItem(val);
@@ -139,10 +148,15 @@ export default function product({data, paymentReal}) {
         icon: 'error',
         title: 'Anda Belum Memilih Payment'
       })
-    } else if(number == "" || number.startsWith("62") || number.length < 9){
+    } else if(number == "" && number.startsWith("62")){
       Toast.fire({
         icon: 'error',
         title: 'No.Wa Anda masih kosong / wajib (62)'
+      })
+    } else if(number.length < 9){
+      Toast.fire({
+        icon: 'error',
+        title: 'No.Wa Wajib Lebih dari 9 angka'
       })
     } else {
         setIsOrder(true)
@@ -233,28 +247,16 @@ export default function product({data, paymentReal}) {
                     </span>
                   </div>
                   <div className="flex flex-1 mt-2">
-                  <ul className="grid ml-3 mr-3 w-full gap-6 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 xl:gap-x-8 mb-5">
-                    {data.nominals.map((data) => {
-                      
-                      return(
-                        <li key={data._id} className="Customize-Nominal-border">
-                          <input type="radio" id={data._id} name="nominal" onClick={() => setIsShowing(true)} onChange={() => onNominalChange(data)}  value={data._id} className="hidden peer" required />
-                          <label htmlFor={data._id} className="inline-flex items-start justify-between w-full pl-4 pr-4 text-gray-500 bg-white border Customize-Nominal border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
-                              <div className="flex flex-col">
-                                  {data.discount > 0 && <div className="w-full ml-1 mt-3 md:mt-1"><span className="text-xs bg-yellow-400 text-white">{data.discount}% OFF</span></div>}
-                                  {data.discount == 0 && <div className="w-full ml-1 mt-3 md:mt-1">&nbsp;</div>}
-                                  <div className="w-full mt-2 text-xs md:text-sm lg:text-sm">{data.productName}</div>
-                              </div>
-                              <svg aria-hidden="true" className="w-6 h-6 ml-3 mt-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
-                          </label>
-                        </li>
-                      )
-                    })}
-                  </ul>
+                    <Nominal 
+                    data={data}
+                    setIsShowing={setIsShowing}
+                    onNominalChange={onNominalChange}
+                    />
                   </div>
                   <div className="Customize-bottom"></div>
                 </div>
               <div className="mt-3">
+             
                 <div className="flex flex-1 ml-3 mt-5 mb-5">
                   <Image alt="1" src={"/icon3.png"} width={50} height={50} />
                   <span className="relative text-white text-lg mt-3 ml-2">
@@ -262,6 +264,16 @@ export default function product({data, paymentReal}) {
                     Pilih Metode Pembayaran
                   </span>
                 </div>
+                {!isShowing && 
+                  <div className="grid grid-cols-3 w-full ml-4 md:ml-10 mr-3">
+                   <Image className="m-1" alt={`payment`} src={`/payments/A1.png`} width={93} height={93} />
+                   <Image className="m-1" alt={`payment`} src={`/payments/FT.png`} width={93} height={93} />
+                   <Image className="m-1" alt={`payment`} src={`/payments/LQ.png`} width={93} height={93} />
+                   <Image className="m-1" alt={`payment`} src={`/payments/M2.png`} width={93} height={93} />
+                   <Image className="m-1" alt={`payment`} src={`/payments/BT.png`} width={93} height={93} />
+                   <Image className="m-1" alt={`payment`} src={`/payments/S1.png`} width={93} height={93} />
+                  </div>
+                }
                 <Transition
                     show={isShowing}
                     enter="transition-opacity duration-75"
@@ -276,139 +288,147 @@ export default function product({data, paymentReal}) {
                     {paymentReal.map((data)=> {
                       return (
                         <Disclosure key={data.dat} defaultOpen>
-                        {({ open }) => (
-                          <>
-                            <Disclosure.Button className="flex w-full justify-between rounded-lg bg-gray-800 px-4 py-2 text-left text-sm font-medium text-gray-300 hover:bg-gray-900 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75">
-                              <span>{data.name}</span>
-                              <ChevronUpIcon
-                                className={`${
-                                  open ? 'rotate-180 transform' : ''
-                                } h-5 w-5 text-gray-500`}
-                              />
-                            </Disclosure.Button>
-                            <Transition
-                              enter="transition duration-200 ease-out"
-                              enterFrom="transform scale-95 opacity-0"
-                              enterTo="transform scale-200 opacity-100"
-                              leave="transition duration-75 ease-out"
-                              leaveFrom="transform scale-100 opacity-100"
-                              leaveTo="transform scale-95 opacity-0"
-                            >
-                              <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
-                                {data.data
-                                .sort(function (
-                                  a,
-                                  b
-                                ) {
-                                  return a.totalFee - b.totalFee;
-                                }).map((r, i)=> {
-                                  let realPrice = 0
-                                  switch (r.paymentMethod) {
-                                    case "LQ":
-                                      realPrice = nominal.priceSell + Math.round(nominal.priceSell * r.totalFee / 100)
-                                      break;
-                                    case "DA": 
-                                      realPrice = nominal.priceSell + Math.round(nominal.priceSell * r.totalFee / 100)
-                                      break;
-                                    case "NQ":
-                                      realPrice = nominal.priceSell + Math.round(nominal.priceSell * r.totalFee / 100)
-                                      break;
-                                    default:
-                                      realPrice = nominal.priceSell + r.totalFee 
-                                      break;
-                                  }
-                                 if (realPrice < 10000) {
-                                    if (r.paymentMethod == 'LA' 
-                                      || r.paymentMethod == 'LQ' 
-                                      || r.paymentMethod == 'DA'
-                                      || r.paymentMethod == 'NQ') {
-                                        if (nominal.discount > 0) {
-                                          const disc = realPrice - Math.round(nominal.discount * realPrice / 100)
-                                          return(
-                                            <li key={r.paymentMethod} className="Customize-Nominal-border">
-                                              <input type="radio" id={r.paymentMethod} onChange={()=>onChangePayment(r,disc)} name="payment" value={r.paymentMethod} className="hidden peer" required />
-                                              <label htmlFor={r.paymentMethod} className="inline-flex items-start justify-between w-full p-2 text-gray-500 bg-white border Customize-Nominal border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
-                                              <div className="flex flex-col">
-                                                   {i == 0 && <HandThumbUpIcon className="ml-7 md:ml-20 h-5 w-5 text-gray-500" />} 
-                                                   {i != 0 && <div className="w-full ml-3 md:ml-20">&nbsp;</div>}
-                                                    <div className="w-full ml-3 md:ml-10"><Image alt={r.paymentMethod} src={r.paymentImage} width={95} height={95} /></div>
-                                              </div> 
-                                                <div className="flex flex-col mr-3 mt-3 md:mr-20">
-                                                  <span className="text-xs line-through	"><FormatRupiah value={realPrice}/></span>
-                                                  <span className="text-lg text-red-500"><FormatRupiah value={disc}/></span>
-                                                </div>
-                                              </label>
-                                            </li>
-                                          )
-                                        } else {
-                                          return(
-                                            <li key={r.paymentMethod} className="Customize-Nominal-border">
-                                              <input type="radio" id={r.paymentMethod} onChange={()=>onChangePayment(r,realPrice)} name="payment" value={r.paymentMethod} className="hidden peer" required />
-                                              <label htmlFor={r.paymentMethod} className="inline-flex items-start justify-between w-full p-2 text-gray-500 bg-white border Customize-Nominal border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
-                                              <div className="flex flex-col">
-                                                   {i == 0 && <HandThumbUpIcon className="ml-7 md:ml-20 h-5 w-5 text-gray-500" />} 
-                                                   {i != 0 && <div className="w-full ml-3 md:ml-20">&nbsp;</div>}
-                                                    <div className="w-full ml-3 md:ml-10"><Image alt={r.paymentMethod} src={r.paymentImage} width={95} height={95} /></div>
-                                              </div> 
-                                                <div className="mr-3 mt-5 md:mr-20 text-sm md:text-lg lg:text-lg"><FormatRupiah value={realPrice}/></div>
-                                              </label>
-                                            </li>
-                                          )
-                                        }
+                          {({ open }) => (
+                            <>
+                              <Disclosure.Button className="flex w-full justify-between rounded-lg bg-gray-800 px-4 py-2 text-left text-sm font-medium text-gray-300 hover:bg-gray-900 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75">
+                                <span>{data.name}</span>
+                                <ChevronUpIcon
+                                  className={`${
+                                    open ? 'rotate-180 transform' : ''
+                                  } h-5 w-5 text-gray-500`}
+                                />
+                              </Disclosure.Button>
+                              <Transition
+                                enter="transition duration-200 ease-out"
+                                enterFrom="transform scale-95 opacity-0"
+                                enterTo="transform scale-200 opacity-100"
+                                leave="transition duration-75 ease-out"
+                                leaveFrom="transform scale-100 opacity-100"
+                                leaveTo="transform scale-95 opacity-0"
+                              >
+                                <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
+                                  {data.data
+                                  .sort(function (
+                                    a,
+                                    b
+                                  ) {
+                                    return a.totalFee - b.totalFee;
+                                  }).map((r, i)=> {
+                                    let realPrice = 0
+                                    switch (r.paymentMethod) {
+                                      case "LQ":
+                                        realPrice = nominal.priceSell + Math.round(nominal.priceSell * r.totalFee / 100)
+                                        break;
+                                      case "DA": 
+                                        realPrice = nominal.priceSell + Math.round(nominal.priceSell * r.totalFee / 100)
+                                        break;
+                                      case "NQ":
+                                        realPrice = nominal.priceSell + Math.round(nominal.priceSell * r.totalFee / 100)
+                                        break;
+                                      default:
+                                        realPrice = nominal.priceSell + r.totalFee 
+                                        break;
+                                    }
+                                  if (realPrice < 10000) {
+                                      if (r.paymentMethod == 'LA' 
+                                        || r.paymentMethod == 'LQ' 
+                                        || r.paymentMethod == 'DA'
+                                        || r.paymentMethod == 'NQ') {
+                                          if (nominal.discount > 0) {
+                                            const disc = realPrice - Math.round(nominal.discount * realPrice / 100)
+                                            return(
+                                              <li key={r.paymentMethod} className="Customize-Nominal-border">
+                                                <input type="radio" id={r.paymentMethod} onChange={()=>onChangePayment(r,disc)} name="payment" value={r.paymentMethod} className="hidden peer" required />
+                                                <label htmlFor={r.paymentMethod} className="inline-flex items-start justify-between w-full p-2 text-gray-500 bg-white border Customize-Nominal border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
+                                                <div className="flex flex-col">
+                                                    {i == 0 && <HandThumbUpIcon className="ml-7 md:ml-20 h-5 w-5 text-gray-500" />} 
+                                                    {i != 0 && <div className="w-full ml-3 md:ml-20">&nbsp;</div>}
+                                                      <div className="w-full ml-4 md:ml-10">
+                                                        <Image alt={r.paymentMethod} src={`/payments/${r.paymentMethod}.png`} width={93} height={93} />
+                                                      </div>
+                                                </div> 
+                                                  <div className="flex flex-col mr-3 mt-3 md:mr-20">
+                                                    <span className="text-xs line-through	"><FormatRupiah value={realPrice}/></span>
+                                                    <span className="text-lg text-red-500"><FormatRupiah value={disc}/></span>
+                                                  </div>
+                                                </label>
+                                              </li>
+                                            )
+                                          } else {
+                                            return(
+                                              <li key={r.paymentMethod} className="Customize-Nominal-border">
+                                                <input type="radio" id={r.paymentMethod} onChange={()=>onChangePayment(r,realPrice)} name="payment" value={r.paymentMethod} className="hidden peer" required />
+                                                <label htmlFor={r.paymentMethod} className="inline-flex items-start justify-between w-full p-2 text-gray-500 bg-white border Customize-Nominal border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
+                                                <div className="flex flex-col">
+                                                    {i == 0 && <HandThumbUpIcon className="ml-7 md:ml-20 h-5 w-5 text-gray-500" />} 
+                                                    {i != 0 && <div className="w-full ml-3 md:ml-20">&nbsp;</div>}
+                                                      <div className="w-full ml-4 md:ml-10">
+                                                        <Image alt={r.paymentMethod} src={`/payments/${r.paymentMethod}.png`} width={93} height={93} />
+                                                      </div>
+                                                </div> 
+                                                  <div className="mr-3 mt-5 md:mr-20 text-sm md:text-lg lg:text-lg"><FormatRupiah value={realPrice}/></div>
+                                                </label>
+                                              </li>
+                                            )
+                                          }
+                                      } else {
+                                        return(
+                                          <li key={r.paymentMethod} className="Customize-Nominal-border">
+                                            <input type="radio" id={r.paymentMethod} name="payment" value={r.paymentMethod} className="hidden peer" disabled/>
+                                            <label htmlFor={r.paymentMethod} className="inline-flex items-start justify-between w-full p-5 text-gray-500 bg-white border Customize-Nominal border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
+                                            <div className="block">
+                                                  <div className="w-full ml-4 md:ml-10">
+                                                    <Image alt={r.paymentMethod} src={`/payments/${r.paymentMethod}.png`} width={93} height={93} />
+                                                  </div>
+                                            </div> 
+                                              <div className="mr-3 mt-3 md:mr-20 text-sm md:text-lg lg:text-lg">Tidak Tersedia</div>
+                                            </label>
+                                        </li>
+                                        )
+                                      }
+                                  } else {
+                                    if (nominal.discount > 0) {
+                                      const disc = realPrice - Math.round(nominal.discount * realPrice / 100)
+                                      return(
+                                        <li key={r.paymentMethod} className="Customize-Nominal-border">
+                                          <input type="radio" id={r.paymentMethod} onChange={()=>onChangePayment(r,realPrice)} name="payment" value={r.paymentMethod} className="hidden peer" required />
+                                          <label htmlFor={r.paymentMethod} className="inline-flex items-start justify-between w-full p-2 text-gray-500 bg-white border Customize-Nominal border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
+                                          <div className="flex flex-col">
+                                              {i == 0 && <HandThumbUpIcon className="ml-7 md:ml-20 h-5 w-5 text-gray-500" />} 
+                                              {i != 0 && <div className="w-full ml-3 md:ml-20">&nbsp;</div>}
+                                              <div className="w-full ml-4 md:ml-10"> <Image alt={r.paymentMethod} src={`/payments/${r.paymentMethod}.png`} width={93} height={93} />
+                                            </div>
+                                          </div> 
+                                            <div className="flex flex-col mr-3 mt-3 md:mr-20">
+                                              <span className="text-xs line-through	"><FormatRupiah value={realPrice}/></span>
+                                              <span className="text-lg text-red-500"><FormatRupiah value={disc}/></span>
+                                            </div>
+                                          </label>
+                                        </li>
+                                      )
                                     } else {
                                       return(
                                         <li key={r.paymentMethod} className="Customize-Nominal-border">
-                                          <input type="radio" id={r.paymentMethod} name="payment" value={r.paymentMethod} className="hidden peer" disabled/>
-                                          <label htmlFor={r.paymentMethod} className="inline-flex items-start justify-between w-full p-5 text-gray-500 bg-white border Customize-Nominal border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
-                                          <div className="block">
-                                                <div className="w-full ml-3 md:ml-10"><Image alt={r.paymentMethod} src={r.paymentImage} width={95} height={95} /></div>
+                                          <input type="radio" id={r.paymentMethod} onChange={()=>onChangePayment(r,realPrice)} name="payment" value={r.paymentMethod} className="hidden peer" required />
+                                          <label htmlFor={r.paymentMethod} className="inline-flex items-start justify-between w-full p-2 text-gray-500 bg-white border Customize-Nominal border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
+                                          <div className="flex flex-col">
+                                              {i == 0 && <HandThumbUpIcon className="ml-7 md:ml-20 h-5 w-5 text-gray-500" />} 
+                                              {i != 0 && <div className="w-full ml-3 md:ml-20">&nbsp;</div>}
+                                              <div className="w-full ml-4 md:ml-10"> <Image alt={r.paymentMethod} src={`/payments/${r.paymentMethod}.png`} width={93} height={93} />
+                                            </div>
                                           </div> 
-                                            <div className="mr-3 mt-3 md:mr-20 text-sm md:text-lg lg:text-lg">Tidak Tersedia</div>
+                                            <div className="mr-3 mt-5 md:mr-20 text-sm md:text-lg lg:text-lg"><FormatRupiah value={realPrice}/></div>
                                           </label>
-                                      </li>
+                                        </li>
                                       )
                                     }
-                                 } else {
-                                  if (nominal.discount > 0) {
-                                    const disc = realPrice - Math.round(nominal.discount * realPrice / 100)
-                                    return(
-                                      <li key={r.paymentMethod} className="Customize-Nominal-border">
-                                        <input type="radio" id={r.paymentMethod} onChange={()=>onChangePayment(r,realPrice)} name="payment" value={r.paymentMethod} className="hidden peer" required />
-                                        <label htmlFor={r.paymentMethod} className="inline-flex items-start justify-between w-full p-2 text-gray-500 bg-white border Customize-Nominal border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
-                                        <div className="flex flex-col">
-                                             {i == 0 && <HandThumbUpIcon className="ml-7 md:ml-20 h-5 w-5 text-gray-500" />} 
-                                             {i != 0 && <div className="w-full ml-3 md:ml-20">&nbsp;</div>}
-                                              <div className="w-full ml-3 md:ml-10"><Image alt={r.paymentMethod} src={r.paymentImage} width={95} height={95} /></div>
-                                        </div> 
-                                          <div className="flex flex-col mr-3 mt-3 md:mr-20">
-                                            <span className="text-xs line-through	"><FormatRupiah value={realPrice}/></span>
-                                            <span className="text-lg text-red-500"><FormatRupiah value={disc}/></span>
-                                          </div>
-                                        </label>
-                                      </li>
-                                    )
-                                  } else {
-                                    return(
-                                      <li key={r.paymentMethod} className="Customize-Nominal-border">
-                                        <input type="radio" id={r.paymentMethod} onChange={()=>onChangePayment(r,realPrice)} name="payment" value={r.paymentMethod} className="hidden peer" required />
-                                        <label htmlFor={r.paymentMethod} className="inline-flex items-start justify-between w-full p-2 text-gray-500 bg-white border Customize-Nominal border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
-                                        <div className="flex flex-col">
-                                             {i == 0 && <HandThumbUpIcon className="ml-7 md:ml-20 h-5 w-5 text-gray-500" />} 
-                                             {i != 0 && <div className="w-full ml-3 md:ml-20">&nbsp;</div>}
-                                              <div className="w-full ml-3 md:ml-10"><Image alt={r.paymentMethod} src={r.paymentImage} width={95} height={95} /></div>
-                                        </div> 
-                                          <div className="mr-3 mt-5 md:mr-20 text-sm md:text-lg lg:text-lg"><FormatRupiah value={realPrice}/></div>
-                                        </label>
-                                      </li>
-                                    )
                                   }
-                                 }
-                                })}
-                              </Disclosure.Panel>
-                            </Transition>
-                          </>
-                        )}
-                      </Disclosure>
+                                  })}
+                                </Disclosure.Panel>
+                              </Transition>
+                            </>
+                          )}
+                        </Disclosure>
                       )
                     })}
                   </div>

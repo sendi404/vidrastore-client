@@ -32,7 +32,7 @@ export default function Carousel({ data }) {
                   <Image
                     src={`https://blog.kawestore.com/uploads/${data.carousel}`}
                     width={1300}
-                    height={100}
+                    height={500}
                     alt="Carousel Game"
                     className="w-full object-cover object-center cursor-grab  focus:cursor-auto"
                   />
