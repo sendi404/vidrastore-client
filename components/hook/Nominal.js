@@ -3,7 +3,6 @@ import Image from 'next/image';
 
 export default function Nominal(props) {
     const {data, setIsShowing, onNominalChange} = props;
-    console.log(data);
   if (data.codeVoucher == '93') {
     return (
         <ul className="grid ml-3 mr-3 w-full gap-6 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 xl:gap-x-8 mb-5">
