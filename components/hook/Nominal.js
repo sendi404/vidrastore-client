@@ -9,7 +9,7 @@ export default function Nominal(props) {
           {data.nominals.map((data) => {
             return(
               <li key={data._id} className="Customize-Nominal-border">
-                <input type="radio" id={data._id} name="nominal" onClick={() => setIsShowing(true)} onChange={() => onNominalChange(data)}  value={data._id} className="hidden peer" required />
+                <input type="radio" id={data._id} name="nominal"  onClick={() => setIsShowing(true)} onChange={() => onNominalChange(data)}  value={data._id} className="hidden peer" required />
                 <label htmlFor={data._id} className="inline-flex items-start justify-between w-full pl-4 pr-4 text-gray-500 bg-white border Customize-Nominal border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
                     <div className="flex flex-col items-center">
                         {data.discount > 0 && <div className="w-full ml-1 mt-1 md:mt-1"><span className="text-xs bg-yellow-400 text-white">{data.discount}% OFF</span></div>}
