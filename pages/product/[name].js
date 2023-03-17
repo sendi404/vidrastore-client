@@ -183,9 +183,7 @@ export default function product({data, paymentReal}) {
           id_players:"",
           totalBill:price
       }
-      // console.log(input);
         const result = await cekout(input);
-        console.log(result);
         router.push(`/order/${result.reference}`)
     }
   }
