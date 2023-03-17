@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const ROOT_API = "https://blog.kawestore.com";
+const ROOT_API = process.env.NEXT_PUBLIC_ROOT_API;
 const API_VERSI = "api/v1";
 const AUTHORIZATION = "wjMc4dnW0LIayNPFCTASDX3kdRYw0zil"
 
