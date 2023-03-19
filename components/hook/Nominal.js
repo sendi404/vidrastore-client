@@ -26,6 +26,29 @@ export default function Nominal(props) {
           })}
         </ul>
       )
+  } else if(data.codeVoucher == '92'){
+    return (
+      <ul className="grid ml-3 mr-3 w-full gap-6 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 xl:gap-x-8 mb-5">
+          {data.nominals.map((data) => {
+            return(
+              <li key={data._id} className="Customize-Nominal-border">
+                <input type="radio" id={data._id} name="nominal"  onClick={() => setIsShowing(true)} onChange={() => onNominalChange(data)}  value={data._id} className="hidden peer" required />
+                <label htmlFor={data._id} className="inline-flex items-start justify-between w-full pl-4 pr-4 text-gray-500 bg-white border Customize-Nominal border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
+                    <div className="flex flex-col items-center">
+                        {data.discount > 0 && <div className="w-full ml-1 mt-1 md:mt-1"><span className="text-xs bg-yellow-400 text-white">{data.discount}% OFF</span></div>}
+                        {data.discount == 0 && <div className="w-full ml-1 mt-1 md:mt-1">&nbsp;</div>}
+                        <small className="w-full text-xs md:text-sm lg:text-sm">{data.productName}</small>
+                    </div>
+                    {data.priceSell <= 10000 && <Image alt={data._id} className="w-6 h-6 mt-7 mr-2" src={`/nominals/FF/DM1.png`} width={20} height={20}/>}
+                    {data.priceSell > 10000 && data.priceSell < 100000 && <Image alt={data._id} className="w-6 h-6 mt-7 mr-2" src={`/nominals/FF/DM2.png`} width={20} height={20}/>}
+                    {data.priceSell > 100000 && data.productID != 'FFEP' && <Image alt={data._id} className="w-6 h-6 mt-7 mr-2" src={`/nominals/FF/DM3.png`} width={20} height={20}/>}
+                    {data.productID == 'MLSL' && <Image alt={data._id} className="w-20 h-6 mt-7" src={`/nominals/FF/EP.png`} width={20} height={20}/>}
+                </label>
+              </li>
+            )
+          })}
+        </ul>
+    )
   } else {
     return (
         <ul className="grid ml-3 mr-3 w-full gap-6 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 xl:gap-x-8 mb-5">

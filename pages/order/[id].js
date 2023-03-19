@@ -13,6 +13,7 @@ export async function getServerSideProps(context) {
   };
 }
 export default function CekoutMenu({ data }) { 
+  console.log(data);
   const [response, setResponse] = useState({
     statusBayar: "WAIT..",
     statusOrder: "WAIT..",
@@ -118,15 +119,23 @@ export default function CekoutMenu({ data }) {
                 <div className="col-span-4">
                   {data.historyVoucherTopup.productName}
                 </div>
+              {data.historyVoucherTopup.codeVoucher == '11' || data.historyVoucherTopup.codeVoucher == '1' ? "" :
+              <>
                 <div className="col-span-2">Username</div>
                 <div className="col-span-4">{data.buyers.nickGame}</div>
+              </>
+              }
+              {data.historyVoucherTopup.codeVoucher == '1' ? "" : 
+              <>
                 <div className="col-span-2">User ID</div>
                 <div className="col-span-4">
                   {data.buyers.array_1}{" "}
-                  {data.buyers.array_2 != ""
-                    ? `( ${data.buyers.array_2} )`
-                    : ""}
+                  {data.buyers.array_2 == "" ? "" : ""}
+                  {data.buyers.array_2 != "" && data.historyVoucherTopup.codeVoucher == '11' ? `( ****** )` : ""}
+                  {data.buyers.array_2 != "" && data.historyVoucherTopup.codeVoucher != '11' ? ` ( ${data.buyers.array_2} )`: ""} 
                 </div>
+              </>}
+                
                 <div className="col-span-2">No.WA</div>
                 <div className="col-span-4">{data.buyers.numberPhone}</div>
                 <div className="col-span-2">Status Bayar</div>

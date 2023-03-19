@@ -3,7 +3,7 @@ import { LandingPages } from "@/services/LandingPage";
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { Disclosure, Transition } from '@headlessui/react'
-import { ChevronUpIcon, HandThumbUpIcon } from '@heroicons/react/20/solid'
+import { ChevronUpIcon, HandThumbUpIcon, InformationCircleIcon, QuestionMarkCircleIcon } from '@heroicons/react/20/solid'
 import { getDetailVoucher } from "@/services/DetailPage";
 import { FormatRupiah } from "@arismun/format-rupiah";
 import { cekout, getPaymentGateAway } from "@/services/Payment";
@@ -121,6 +121,26 @@ export default function product({data, paymentReal}) {
       setNumber(val.target.value);
     }
   }
+  const announcmentNumberPhone = async() => {
+    Swal.fire('*<b>PENTING</b>*\nMasukan nomor whatsapp anda dengan benar karena semua orderan akan dikirim/diberitahukan melalui whatsapp')
+  }
+  const announcmentUser = async() => {
+    if (data.codeVoucher == '93') {
+      Swal.fire({
+        imageUrl: '/informations/ML.png',
+        imageWidth: 500,
+        imageHeight: 200,
+        imageAlt: 'Informations image',
+      })
+    } else if (data.codeVoucher == '92') {
+      Swal.fire({
+        imageUrl: '/informations/FF.png',
+        imageWidth: 500,
+        imageHeight: 200,
+        imageAlt: 'Informations image',
+      })
+    }
+  }
   const onOrder = async() => {
     const Toast = Swal.mixin({
       toast: true,
@@ -225,9 +245,9 @@ export default function product({data, paymentReal}) {
               <div className="border-b border-black">
                 <div className="flex flex-1 ml-3 mt-5 mb-5">
                   <Image alt="1" src={"/icon1.png"} width={50} height={50} />{" "}
-                  <span className="relative text-white text-lg mt-3 ml-2">
+                  <span className="flex text-white text-lg mt-3 ml-2">
                     {" "}
-                    Input Data Game anda
+                    Input Data User anda <QuestionMarkCircleIcon className="ml-2 mt-1 h-5 w-5 text-gray-500 cursor-pointer" onClick={announcmentUser} />
                   </span>
                 </div>
                 <InputUserName
@@ -437,9 +457,9 @@ export default function product({data, paymentReal}) {
               <div className="mt-3">
                 <div className="flex flex-1 ml-3 mt-5 mb-5">
                   <Image alt="1" src={"/icon4.png"} width={50} height={50} />
-                  <span className="relative text-white text-lg mt-3 ml-2">
-                    {" "}
-                    Masukan Nomor HP anda
+                  <span className="flex text-white text-lg mt-3 ml-2">
+                  {" "}
+                  Masukan Nomor HP anda <InformationCircleIcon className="ml-2 mt-1 h-5 w-5 text-gray-500 cursor-pointer" onClick={announcmentNumberPhone} />
                   </span>
                 </div>
                 <div className="flex-1 ml-3 mr-3 mt-5 mb-5">
@@ -451,6 +471,7 @@ export default function product({data, paymentReal}) {
                       className="mt-1 px-3 py-2 text-blue-500 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
                       placeholder="Nomor WA Aktif cth.6281283111111"
                     />
+                    <span className="text-red-500">*</span><span className="text-sm">Pastikan Nomor whatsapp anda sudah benar</span>
                   </div>
                 <div className="Customize-bottom"></div>
               </div>
