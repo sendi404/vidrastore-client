@@ -49,7 +49,7 @@ export default function Voucher({ data }) {
                         className="box aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-w-7 xl:aspect-h-8"
                       >
                         <Image
-                          src={`http://localhost:3000/uploads/${gameItem.thumbnail}`}
+                          src={`http://blog.vidrastore.com/uploads/${gameItem.thumbnail}`}
                           width={200}
                           height={200}
                           alt="Voucher Game"

@@ -231,7 +231,7 @@ export default function product({data, paymentReal}) {
                     <div className="flex-col m-2">
                       <Image
                         alt="GameVoucher"
-                        src={`http://localhost:3000/uploads/${data.thumbnail}`}
+                        src={`http://blog.vidrastore.com/uploads/${data.thumbnail}`}
                         width={150}
                         height={150}
                       />
