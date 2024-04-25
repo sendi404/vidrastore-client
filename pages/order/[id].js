@@ -80,7 +80,7 @@ export default function CekoutMenu({ data }) {
                 <div className="flex-col m-2">
                   <Image
                     alt="GameVoucher"
-                    src={`https://blog.kawestore.com/uploads/${data.historyVoucherTopup.thumbnail}`}
+                    src={`http://localhost:3000/uploads/${data.historyVoucherTopup.thumbnail}`}
                     width={150}
                     height={150}
                   />

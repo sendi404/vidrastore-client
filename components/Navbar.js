@@ -40,7 +40,7 @@ export default function Navbar() {
                   )}
                 </Disclosure.Button>
               </div>
-              <div className="flex-1 flex item-center justify-center sm:items-stretch sm:justify-start">
+              <div className="flex-1 flex item-center justify-between sm:items-stretch sm:justify-start">
                 <div className="flex shrink-0 items-center ">
                   <Image
                     src={BranchImage}

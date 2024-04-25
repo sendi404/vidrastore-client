@@ -30,7 +30,7 @@ export default function Carousel({ data }) {
               <div key={data._id} className="embla__slide">
                 <div className="embla__scale">
                   <Image
-                    src={`https://blog.kawestore.com/uploads/${data.carousel}`}
+                    src={`http://localhost:3000/uploads/${data.carousel}`}
                     width={1300}
                     height={500}
                     alt="Carousel Game"
