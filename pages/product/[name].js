@@ -317,7 +317,8 @@ export default function product({data, paymentReal}) {
                     >
                   <div className="flex flex-1 mt-2">
                     <div className="rounded-2xl w-full p-2">
-                      {paymentReal.map((data)=> {
+                      METODE PEMBAYARAN BELUM TERSEDIA
+                      {/* {paymentReal.map((data)=> {
                         return (
                           <Disclosure key={data.dat} defaultOpen>
                             {({ open }) => (
@@ -462,7 +463,7 @@ export default function product({data, paymentReal}) {
                             )}
                           </Disclosure>
                         )
-                      })}
+                      })} */}
                     </div>
                   </div>
                   </Transition>
