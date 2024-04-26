@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import BranchImage from "../public/ImageBranch.png";
+import BranchImage from "@/public/ImageBranch.png";
 import { Disclosure, Transition } from "@headlessui/react";
 import { Bars3CenterLeftIcon, XMarkIcon } from "@heroicons/react/24/solid";
 
@@ -9,7 +9,6 @@ const navigation = [
   { name: "Home", href: "/", current: true },
   { name: "Jasa Joki", href: "#", current: false },
   { name: "Calc. ML", href: "/calc/Calculator-Mobile-Legends", current: false },
-  { name: "Login", href: "#", current: false },
 ];
 
 function className(...classes) {
