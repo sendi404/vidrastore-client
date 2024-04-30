@@ -34,7 +34,7 @@ export default function Home({ data, design }) {
 
       <Carousel data={design.carousel} />
       <Voucher data={data.data} />
-      <HeroPage />
+      {/* <HeroPage /> */}
       <Information />
     </>
   );

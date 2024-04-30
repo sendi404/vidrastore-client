@@ -7,7 +7,6 @@ import { Bars3CenterLeftIcon, XMarkIcon } from "@heroicons/react/24/solid";
 const branch = process.env.NEXT_PUBLIC_BRANCH;
 const navigation = [
   { name: "Home", href: "/", current: true },
-  { name: "Jasa Joki", href: "#", current: false },
   { name: "Calc. ML", href: "/calc/Calculator-Mobile-Legends", current: false },
 ];
 
