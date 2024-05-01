@@ -92,7 +92,7 @@ export default function MetodeBayar(props) {
           </div>
       </>
     );
-  } else if (code == "LQ" || code == "NQ") {
+  } else if (code == "LQ" || code == "NQ" || code == "SP") {
     return (
       <>
         <div className="grid grid-cols-6 gap-4 mt-5">
