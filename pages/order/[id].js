@@ -13,7 +13,6 @@ export async function getServerSideProps(context) {
   };
 }
 export default function CekoutMenu({ data }) { 
-  console.log(data);
   const [response, setResponse] = useState({
     statusBayar: "WAIT..",
     statusOrder: "WAIT..",
