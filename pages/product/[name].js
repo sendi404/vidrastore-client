@@ -37,7 +37,7 @@ export async function getStaticProps(context) {
   const retail = []
   const va = []
   payment.map((data)=> {
-    if (data.paymentMethod == 'DA' || data.paymentMethod == 'NQ' || data.paymentMethod == 'LA' || data.paymentMethod == 'LQ') {
+    if (data.paymentMethod == 'DA' || data.paymentMethod == 'NQ' || data.paymentMethod == 'LA' || data.paymentMethod == 'SP') {
       const fees = data
       switch (data.paymentMethod) {
         case 'DA':
@@ -49,7 +49,7 @@ export async function getStaticProps(context) {
         case 'LA':
           fees.totalFee = 3330;
           break;
-        case 'LQ':
+        case 'SP':
           fees.totalFee = 0.8;
           break;
         default:
@@ -300,7 +300,7 @@ export default function product({data, paymentReal}) {
                     <div className="grid grid-cols-3 w-full ml-4 md:ml-10 mr-3">
                     <Image className="m-1" alt={`payment`} src={`/payments/A1.png`} width={93} height={93} />
                     <Image className="m-1" alt={`payment`} src={`/payments/FT.png`} width={93} height={93} />
-                    <Image className="m-1" alt={`payment`} src={`/payments/LQ.png`} width={93} height={93} />
+                    <Image className="m-1" alt={`payment`} src={`/payments/SP.png`} width={93} height={93} />
                     <Image className="m-1" alt={`payment`} src={`/payments/M2.png`} width={93} height={93} />
                     <Image className="m-1" alt={`payment`} src={`/payments/BT.png`} width={93} height={93} />
                     <Image className="m-1" alt={`payment`} src={`/payments/S1.png`} width={93} height={93} />
@@ -348,7 +348,7 @@ export default function product({data, paymentReal}) {
                                     }).map((r, i)=> {
                                       let realPrice = 0
                                       switch (r.paymentMethod) {
-                                        case "LQ":
+                                        case "SP":
                                           realPrice = nominal.priceSell + Math.round(nominal.priceSell * r.totalFee / 100)
                                           break;
                                         case "DA": 
@@ -363,7 +363,7 @@ export default function product({data, paymentReal}) {
                                       }
                                     if (realPrice < 10000) {
                                         if (r.paymentMethod == 'LA' 
-                                          || r.paymentMethod == 'LQ' 
+                                          || r.paymentMethod == 'SP' 
                                           || r.paymentMethod == 'DA'
                                           || r.paymentMethod == 'NQ') {
                                             if (nominal.discount > 0) {
