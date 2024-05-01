@@ -2,12 +2,12 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['blog.kawestore.com'],
+    domains: ['blog.vidrastore.com'],
     unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'blog.kawestore.com',
+        hostname: 'blog.vidrastore.com',
         port: '',
         pathname: '/uploads/**',
       },

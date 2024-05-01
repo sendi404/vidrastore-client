@@ -44,7 +44,7 @@ export default function MetodeBayar(props) {
         </div>
         <div className="grid grid-cols-6 gap-4 mt-5">
           <div className="col-span-2">Nama Penerima</div>
-          <div className="col-span-4">KaweStore</div>
+          <div className="col-span-4">VidraStore</div>
         </div>
       </>
     );
@@ -62,7 +62,7 @@ export default function MetodeBayar(props) {
         </div>
         <div className="grid grid-cols-6 gap-4 mt-5">
           <div className="col-span-2">Nama Penerima</div>
-          <div className="col-span-4">KaweStore</div>
+          <div className="col-span-4">VidraStore</div>
         </div>
         <div className="mx-auto w-full max-w-md rounded-2xl p-2">
             <Disclosure>
@@ -103,7 +103,7 @@ export default function MetodeBayar(props) {
         </div>
         <div className="grid grid-cols-6 gap-4 mt-5">
           <div className="col-span-2">Nama Penerima</div>
-          <div className="col-span-4">KaweStore</div>
+          <div className="col-span-4">VidraStore</div>
         </div>
       </>
     );
@@ -119,7 +119,7 @@ export default function MetodeBayar(props) {
             {pay_code}
           </div>
           <div className="col-span-2">Nama Penerima</div>
-          <div className="col-span-4">KaweStore</div>
+          <div className="col-span-4">VidraStore</div>
         </div>
           <div className="mx-auto w-full max-w-md rounded-2xl p-2">
             <Disclosure>

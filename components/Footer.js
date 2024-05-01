@@ -39,7 +39,7 @@ export default function Footer() {
         <div className="p-5">
           <ul>
             <p className="text-gray-800 font-bold text-2xl pb-4">Whatsapp Support</p>
-            <a target={"_blank"} rel="noreferrer" href="https://web.whatsapp.com/send/?phone=6285793968093&text=Halo+KaweStore&type=phone_number&app_absent=0">
+            <a target={"_blank"} rel="noreferrer" href="https://web.whatsapp.com/send/?phone=6285793968093&text=Halo+VidraStore&type=phone_number&app_absent=0">
               <li className="text-gray-500 text-sm pb-2 font-semibold cursor-pointer  hover:text-blue-600">
                 <div className="flex">
                   <FaWhatsapp className="text-2xl cursor-pointer text-green-400" />
@@ -48,7 +48,7 @@ export default function Footer() {
               </li>
             </a>
             <p className="text-gray-800 font-bold text-2xl pb-4">Email Support</p>
-            <a target={"_blank"} rel="noreferrer" href="https://web.whatsapp.com/send/?phone=6285793968093&text=Halo+KaweStore&type=phone_number&app_absent=0">
+            <a target={"_blank"} rel="noreferrer" href="https://web.whatsapp.com/send/?phone=6285793968093&text=Halo+VidraStore&type=phone_number&app_absent=0">
               <li className="text-gray-500 text-sm pb-2 font-semibold cursor-pointer hover:text-blue-600">
                 <div className="flex">
                   <FaEnvelope className="text-2xl cursor-pointer text-red-300" />
