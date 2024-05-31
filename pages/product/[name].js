@@ -193,7 +193,7 @@ export default function product({data, paymentReal}) {
         const m = new Date().getMinutes();
         const s = new Date().getSeconds();
         const ms = new Date().getMilliseconds();
-        const merchant_ref = "KS" + now1 + "-" + m + s + ms;
+        const merchant_ref = "VS" + now1 + "-" + m + s + ms;
 
         const input = {
           reference: merchant_ref,
@@ -349,7 +349,7 @@ export default function product({data, paymentReal}) {
                                       let realPrice = 0
                                       switch (r.paymentMethod) {
                                         case "SP":
-                                          realPrice = nominal.priceSell + Math.round(nominal.priceSell * r.totalFee / 100)
+                                          realPrice = nominal.priceSell
                                           break;
                                         case "DA": 
                                           realPrice = nominal.priceSell + Math.round(nominal.priceSell * r.totalFee / 100)
